@@ -1,0 +1,160 @@
+<div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+    <div class="px-6 py-5 flex justify-between items-center">
+        <div>
+            <h2 class="section-title">
+                <span class="dot bg-teal-500"></span>
+                Mes Missions
+            </h2>
+            <p class="mt-1 text-sm text-slate-500 ml-5">Missions soumises pour validation.</p>
+        </div>
+        <button (click)="showForm = !showForm"
+            class="inline-flex items-center px-5 py-2.5 text-sm font-bold rounded-xl text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 shadow-lg shadow-indigo-500/20 transition-all duration-200 active:scale-95">
+            {{ showForm ? '✕ Annuler' : '+ Nouvelle mission' }}
+        </button>
+    </div>
+
+    <!-- Add Form -->
+    <div *ngIf="showForm" class="border-t border-slate-100 px-6 py-6 bg-slate-50/50">
+        <form (ngSubmit)="onSubmit()" class="space-y-5 max-w-3xl">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Titre *</label>
+                <input type="text" [(ngModel)]="newMission.titre" name="titre" required
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all"
+                    placeholder="Ex: Stage développement web">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Description</label>
+                <textarea [(ngModel)]="newMission.description" name="description" rows="3"
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all resize-none"
+                    placeholder="Décrivez brièvement la mission..."></textarea>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date de début</label>
+                    <input type="date" [(ngModel)]="newMission.dateDebut" name="dateDebut"
+                        class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date de fin</label>
+                    <input type="date" [(ngModel)]="newMission.dateFin" name="dateFin"
+                        class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-indigo-600 mb-1.5">Email du Validateur *</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </div>
+                    <input type="email" [(ngModel)]="newMission.validatorEmail" name="validatorEmail" required
+                        placeholder="manager@entreprise.com"
+                        class="pl-10 w-full px-4 py-3 border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all">
+                </div>
+                <p class="mt-1 text-[10px] text-slate-500">L'email du manager ou tuteur qui validera cette mission.</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">Compétences mobilisées *</label>
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" *ngFor="let comp of userCompetences" (click)="toggleCompetence(comp.id)"
+                        [class]="selectedCompetenceIds.includes(comp.id)
+                            ? 'px-4 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/20 transition-all duration-200'
+                            : 'px-4 py-2 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 transition-all duration-200'">
+                        {{ comp.nom }}
+                    </button>
+                </div>
+                <p *ngIf="userCompetences.length === 0" class="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg border border-amber-100 mt-2">
+                    ⚠️ Ajoutez des compétences à votre profil pour les sélectionner ici.
+                </p>
+            </div>
+
+            <div *ngIf="errorMessage" class="flex items-center gap-2 bg-red-50 border border-red-100 text-red-700 p-3 rounded-xl text-sm font-medium">
+                <svg class="w-4 h-4 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                {{ errorMessage }}
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" [disabled]="isSubmitting || !newMission.titre"
+                    class="inline-flex items-center px-6 py-3 text-sm font-bold rounded-xl text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 shadow-lg shadow-indigo-500/20 disabled:opacity-50 transition-all active:scale-95">
+                    <span *ngIf="isSubmitting" class="flex items-center gap-2">
+                        <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                        Envoi...
+                    </span>
+                    <span *ngIf="!isSubmitting">🚀 Soumettre la mission</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex justify-center py-10">
+        <div class="w-10 h-10 border-4 border-indigo-100 border-t-indigo-500 rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!isLoading && missions.length === 0 && !showForm"
+        class="border-t border-slate-100 px-6 py-16 text-center">
+        <span class="text-5xl opacity-20 block mb-4">📋</span>
+        <p class="text-slate-400 font-bold text-sm">Aucune mission soumise pour l'instant.</p>
+        <p class="text-slate-400 text-xs mt-1">Cliquez sur "+ Nouvelle mission" pour commencer.</p>
+    </div>
+
+    <!-- Missions Cards -->
+    <div *ngIf="!isLoading && missions.length > 0" class="border-t border-slate-100 p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div *ngFor="let mission of missions"
+                class="group bg-white rounded-2xl border border-slate-100 hover:border-slate-200 hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <div class="p-5">
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-sm font-bold text-slate-800 truncate">{{ mission.titre }}</h3>
+                            <p class="text-xs text-slate-500 mt-0.5 line-clamp-2">{{ mission.description || 'Pas de description' }}</p>
+                        </div>
+                        <span [class]="'flex-shrink-0 px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-full ' + statutClass(mission.statut)">
+                            {{ statutLabel(mission.statut) }}
+                        </span>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="flex items-center gap-4 text-xs text-slate-400 mb-3" *ngIf="mission.dateDebut || mission.dateFin">
+                        <span class="flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            {{ mission.dateDebut || '—' }} → {{ mission.dateFin || '—' }}
+                        </span>
+                    </div>
+
+                    <!-- Validator -->
+                    <div class="flex items-center gap-1.5 text-xs text-indigo-500 font-medium mb-3">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        {{ mission.validatorEmail }}
+                    </div>
+
+                    <!-- Competences -->
+                    <div *ngIf="mission.competencesMobilisees?.length" class="flex flex-wrap gap-1.5 mb-3">
+                        <span *ngFor="let c of mission.competencesMobilisees"
+                            class="px-2.5 py-0.5 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-full border border-indigo-100">
+                            {{ c.nom }}
+                        </span>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex justify-end gap-2 pt-2 border-t border-slate-50">
+                        <button *ngIf="mission.statut === 'PENDING'" (click)="deleteMission(mission.id)"
+                            class="text-xs font-semibold text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all">
+                            Supprimer
+                        </button>
+                        <button *ngIf="mission.statut === 'VALIDATED'"
+                            (click)="downloadAttestation(mission.id, mission.titre)"
+                            class="inline-flex items-center text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition-all">
+                            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Attestation PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
