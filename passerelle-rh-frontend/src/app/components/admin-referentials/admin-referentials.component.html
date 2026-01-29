@@ -1,0 +1,162 @@
+<div class="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-[#1E293B]">
+    <!-- Navbar Header -->
+    <nav class="bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2.5">
+                    <div
+                        class="w-9 h-9 bg-gradient-to-tr from-slate-700 to-slate-800 rounded-xl flex items-center justify-center shadow-lg shadow-slate-500/20">
+                        <span class="text-white font-black text-lg">A</span>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight text-slate-800">CONSOLE <span
+                            class="text-emerald-600">ADMIN</span></span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a routerLink="/admin"
+                        class="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all">
+                        ← Dashboard
+                    </a>
+                    <button routerLink="/admin/users"
+                        class="px-4 py-2 text-sm font-bold text-slate-700 bg-slate-100 rounded-xl hover:bg-slate-200 transition-all">
+                        Utilisateurs
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+        <!-- Header Section -->
+        <div class="mb-10 text-center md:text-left">
+            <p class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">Configuration
+                Référentiels</p>
+            <h1 class="text-3xl font-black text-slate-800">Gestion des Ressources</h1>
+            <p class="text-sm text-slate-500 font-medium">Définissez les compétences disponibles et les badges de
+                récompense.</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-8 bg-slate-100 p-1.5 rounded-2xl w-fit mx-auto md:mx-0">
+            <button (click)="activeTab = 'competences'"
+                class="px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all"
+                [ngClass]="activeTab === 'competences' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+                Compétences
+            </button>
+            <button (click)="activeTab = 'badges'"
+                class="px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all"
+                [ngClass]="activeTab === 'badges' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+                Badges
+            </button>
+        </div>
+
+        <!-- Competences Section -->
+        <div *ngIf="activeTab === 'competences'" class="animate-fadeInUp">
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Add Form -->
+                <div
+                    class="md:col-span-1 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/30 h-fit">
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4">Nouvelle Compétence
+                    </h3>
+                    <input type="text" [(ngModel)]="newCompetenceName" placeholder="Nom de la compétence..."
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all mb-4">
+                    <button (click)="addCompetence()" [disabled]="!newCompetenceName"
+                        class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-slate-200 disabled:opacity-50">
+                        Ajouter au référentiel
+                    </button>
+                </div>
+
+                <!-- List -->
+                <div
+                    class="md:col-span-2 bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/30 overflow-hidden">
+                    <div class="p-6 border-b border-slate-50">
+                        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Liste des Compétences
+                            ({{ competences.length }})</h3>
+                    </div>
+                    <div class="divide-y divide-slate-50 max-h-[500px] overflow-y-auto">
+                        <div *ngFor="let comp of competences"
+                            class="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                            <span class="text-sm font-bold text-slate-700 tracking-tight uppercase">{{ comp.nom
+                                }}</span>
+                            <button (click)="deleteCompetence(comp.id)"
+                                class="text-red-300 hover:text-red-500 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges Section -->
+        <div *ngIf="activeTab === 'badges'" class="animate-fadeInUp">
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Add Form -->
+                <div
+                    class="md:col-span-1 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/30 h-fit">
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4">Nouveau Badge</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label
+                                class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Nom
+                                du Badge</label>
+                            <input type="text" [(ngModel)]="newBadge.nom" placeholder="Ex: Expert"
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-emerald-500 transition-all">
+                        </div>
+                        <div>
+                            <label
+                                class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Seuil
+                                Score (%)</label>
+                            <input type="number" [(ngModel)]="newBadge.seuilScore"
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-emerald-500 transition-all">
+                        </div>
+                        <div>
+                            <label
+                                class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Emoji
+                                / Icône</label>
+                            <input type="text" [(ngModel)]="newBadge.iconeUrl" placeholder="Ex: 🏆 ou URL"
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-emerald-500 transition-all">
+                        </div>
+                        <button (click)="addBadge()" [disabled]="!newBadge.nom || !newBadge.iconeUrl"
+                            class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-200 disabled:opacity-50">
+                            Créer le Badge
+                        </button>
+                    </div>
+                </div>
+
+                <!-- List -->
+                <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div *ngFor="let badge of badges"
+                        class="bg-white p-6 rounded-3xl border border-slate-100 shadow-md hover:shadow-xl transition-all group relative overflow-hidden">
+                        <div
+                            class="absolute -right-2 -top-2 text-6xl opacity-5 group-hover:scale-110 transition-transform">
+                            {{ badge.iconeUrl }}</div>
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="text-3xl">{{ badge.iconeUrl }}</div>
+                            <div>
+                                <h4 class="font-black text-slate-800 uppercase tracking-tight">{{ badge.nom }}</h4>
+                                <p class="text-[10px] font-bold text-emerald-500">Seuil: {{ badge.seuilScore }}% de
+                                    fiabilité</p>
+                            </div>
+                        </div>
+                        <button (click)="deleteBadge(badge.id)"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-2 bg-red-50 text-red-500 rounded-lg">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div *ngIf="badges.length === 0"
+                        class="col-span-full py-20 bg-white rounded-3xl border-2 border-dashed border-slate-100 flex flex-col items-center justify-center opacity-50">
+                        <span class="text-4xl mb-2">🏅</span>
+                        <p class="text-xs font-black uppercase tracking-widest text-slate-400 text-center">Aucun badge
+                            configuré</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
