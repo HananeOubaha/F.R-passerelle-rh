@@ -1,0 +1,110 @@
+<div class="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-[#1E293B]">
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2.5">
+                    <div
+                        class="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                        <span class="text-white font-black text-lg">P</span>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight text-slate-800">PASSERELLE <span
+                            class="text-emerald-600">RH</span></span>
+                </div>
+                <div class="text-[10px] font-black uppercase tracking-widest text-slate-400">Services de Vérification
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-2xl w-full mx-auto px-4 py-20 flex flex-col items-center">
+
+        <!-- Loading -->
+        <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-12">
+            <div class="w-16 h-16 border-4 border-slate-100 border-t-indigo-500 rounded-full animate-spin"></div>
+            <p class="mt-6 text-slate-500 font-bold uppercase tracking-widest text-xs">Analyse de l'attestation...</p>
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="error"
+            class="w-full bg-white rounded-3xl p-10 border border-red-100 text-center shadow-xl animate-fade-in-up">
+            <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-black text-slate-800 mb-2">Vérification Échouée</h1>
+            <p class="text-slate-500 mb-8">{{ error }}</p>
+            <a routerLink="/"
+                class="px-6 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-all">Aller
+                sur Passerelle RH</a>
+        </div>
+
+        <!-- Success -->
+        <div *ngIf="!isLoading && result" class="w-full animate-fade-in-up">
+
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+                <div class="bg-emerald-500 p-1 bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
+
+                <div class="p-10 text-center">
+                    <div
+                        class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white shadow-lg overflow-hidden relative">
+                        <svg class="w-12 h-12 text-emerald-500 animate-bounce-short" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <div class="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] mb-1">Status de
+                        l'attestation</div>
+                    <h1 class="text-3xl font-black text-slate-800 mb-4">Document Authentique</h1>
+
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100/50 rounded-full border border-emerald-200 mb-8">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-xs font-black text-emerald-800 uppercase tracking-widest">Vérifié sur
+                            Passerelle RH</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 text-left">
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                                Utilisateur Certifié</div>
+                            <div class="font-black text-slate-800 text-lg uppercase">{{ result.utilisateur }}</div>
+                        </div>
+
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Mission
+                                Professionnelle</div>
+                            <div class="font-black text-slate-800 uppercase">{{ result.mission }}</div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Date
+                                    Validation</div>
+                                <div class="font-bold text-slate-700">{{ result.dateValidation | date:'dd/MM/yyyy' }}
+                                </div>
+                            </div>
+                            <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Signé
+                                    par</div>
+                                <div class="font-bold text-slate-700">{{ result.validateur }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 pt-8 border-t border-slate-100">
+                        <p class="text-xs text-slate-400 font-medium">L'identifiant de cette mission est certifié par
+                            Passerelle RH. Cette attestation ne peut pas être falsifiée ou modifiée sans invalider cette
+                            signature numérique.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-center mt-8 text-slate-400 text-xs font-bold uppercase tracking-widest">© 2026 PASSERELLE RH
+                • Sécurité et Fiabilité</p>
+        </div>
+
+    </main>
+</div>
