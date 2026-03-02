@@ -1,0 +1,14 @@
+package com.passerellerh.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Table(name = "administrateurs")
+@Getter
+@Setter
+public class Administrateur extends User {
+    // Spécificités admin si nécessaire
+}

@@ -1,0 +1,187 @@
+Table des matières
+1 Description du système 2
+1.1 Contexte . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.2 Description générale . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+2 Objectifs du système 2
+2.1 Objectifs principaux . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+2.2 Objectifs secondaires . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+3 Utilisateurs du système 3
+3.1 Utilisateur (Jeune / Employé) . . . . . . . . . . . . . . . . . . . . . . . . . 3
+3.2 Validateur (Employeur / Responsable) . . . . . . . . . . . . . . . . . . . . 3
+3.3 Administrateur . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+4 Fonctionnalités fonctionnelles 3
+4.1 Authentification et autorisation . . . . . . . . . . . . . . . . . . . . . . . . 3
+4.2 Gestion des profils utilisateurs . . . . . . . . . . . . . . . . . . . . . . . . . 3
+4.3 Gestion des missions professionnelles . . . . . . . . . . . . . . . . . . . . . 4
+4.4 Validation des missions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+4.5 Génération de preuves professionnelles . . . . . . . . . . . . . . . . . . . . 4
+4.6 Profil professionnel (Passeport RH) . . . . . . . . . . . . . . . . . . . . . . 4
+4.7 Dashboard Administrateur . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+4.8 Système de score et badges (simplifié) . . . . . . . . . . . . . . . . . . . . . 5
+5 Spécifications techniques 5
+5.1 Backend . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+5.2 Frontend . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+5.3 Architecture . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+5.4 Sécurité . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+5.5 Déploiement & DevOps . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+6 Conclusion 6
+
+Cahier des Charges - Passerelle RH 2025 – 2026
+
+1 Description du système
+1.1 Contexte
+
+De nombreux jeunes talents acquièrent des compétences précieuses à travers des mis-
+sions ponctuelles, stages, projets ou emplois temporaires. Cependant, ces expériences sont
+
+souvent difficiles à valoriser dans un CV classique, car elles manquent de preuves véri-
+fiables.
+
+Par ailleurs, les outils RH existants sont souvent lourds, coûteux ou inadaptés aux
+petites structures et aux jeunes profils.
+1.2 Description générale
+Passerelle RH est une application web RH simplifiée permettant aux utilisateurs de :
+— Créer et gérer leurs expériences professionnelles (missions)
+— Obtenir des preuves professionnelles validées par un employeur ou un responsable
+— Générer des attestations PDF avec QR code
+— Présenter un profil professionnel fiable et structuré
+
+Le système s’inspire des principes classiques de la gestion RH (validation, suivi, sta-
+tistiques), tout en apportant une dimension innovante orientée employabilité.
+
+2 Objectifs du système
+2.1 Objectifs principaux
+— Mettre en place une plateforme RH légère et sécurisée
+— Permettre la création et validation d’expériences professionnelles
+— Générer des preuves vérifiables (PDF + QR code)
+— Centraliser les missions validées dans un profil professionnel unique
+— Garantir la traçabilité et la fiabilité des validations
+2.2 Objectifs secondaires
+— Offrir une visualisation claire des données RH via un dashboard
+— Améliorer la visibilité des compétences des utilisateurs
+— Introduire un score de fiabilité simple basé sur les validations
+— Faciliter l’évolution vers une version plus avancée (V2)
+— Appliquer les bonnes pratiques de développement full stack
+
+2
+
+Cahier des Charges - Passerelle RH 2025 – 2026
+
+3 Utilisateurs du système
+3.1 Utilisateur (Jeune / Employé)
+Rôle : USER
+— Créer et gérer son profil
+— Ajouter des missions professionnelles
+— Générer des liens de validation
+— Consulter ses attestations et son score
+— Exporter ses preuves professionnelles
+3.2 Validateur (Employeur / Responsable)
+Rôle : VALIDATOR
+— Accéder à une mission via un lien sécurisé
+— Valider ou refuser une mission
+— Donner une évaluation simple (notes + commentaire)
+3.3 Administrateur
+Rôle : ADMIN
+— Gérer les utilisateurs
+— Superviser les missions et validations
+— Consulter les statistiques globales
+— Gérer les référentiels (compétences, badges)
+— Modérer les contenus si nécessaire
+
+4 Fonctionnalités fonctionnelles
+4.1 Authentification et autorisation
+— Inscription et connexion sécurisées
+— Authentification JWT (access + refresh token)
+— Gestion des rôles (ADMIN / USER / VALIDATOR)
+— Protection des routes backend et frontend
+— Déconnexion sécurisée
+
+4.2 Gestion des profils utilisateurs
+— Création et mise à jour du profil
+
+3
+
+Cahier des Charges - Passerelle RH 2025 – 2026
+— Informations personnelles : Nom, Prénom, Email, Ville, Compétences (tags)
+— Consultation publique/privée du profil
+— Affichage du score de fiabilité
+4.3 Gestion des missions professionnelles
+— Création d’une mission par l’utilisateur
+— Modification / suppression d’une mission (si non validée)
+— Consultation de la liste des missions
+— Statuts possibles : En attente, Validée, Refusée
+— Génération automatique d’un lien de validation sécurisé
+4.4 Validation des missions
+— Accès à un formulaire de validation via lien sécurisé
+— Évaluation sur 3 critères : Ponctualité, Sérieux, Autonomie
+— Commentaire optionnel
+— Acceptation ou refus de la mission
+— Mise à jour automatique du statut
+4.5 Génération de preuves professionnelles
+— Génération automatique d’une attestation PDF
+— Intégration d’un QR code de vérification
+— Archivage de l’attestation
+— Téléchargement de la preuve par l’utilisateur
+4.6 Profil professionnel (Passeport RH)
+— Timeline des missions validées
+— Affichage des attestations
+— Visualisation des badges
+— Score de fiabilité mis à jour automatiquement
+4.7 Dashboard Administrateur
+— Nombre total d’utilisateurs
+— Nombre de missions créées / validées
+— Répartition par ville
+— Répartition par compétences
+— Taux de validation global (Graphiques via Chart.js)
+
+4
+
+Cahier des Charges - Passerelle RH 2025 – 2026
+
+4.8 Système de score et badges (simplifié)
+— Calcul automatique du score de fiabilité
+— Attribution de badges simples : Débutant, Confirmé, Fiable
+
+5 Spécifications techniques
+5.1 Backend
+— Langage : Java 21
+— Framework : Spring Boot
+— Sécurité : Spring Security + JWT
+— ORM : Spring Data JPA / Hibernate
+— Base de données : PostgreSQL
+— Documentation API : Swagger / OpenAPI
+— PDF : OpenPDF
+— QR Code
+— Mapping : MapStruct
+— Tests : JUnit 5, Mockito
+5.2 Frontend
+— Framework : Angular 17 ou React
+— UI : Tailwind CSS
+— Graphiques : Chart.js
+— Responsive
+5.3 Architecture
+— Architecture en couches : Controller → Service → Repository
+— Communication REST (JSON)
+— DTOs pour échanges sécurisés
+— Séparation claire des responsabilités
+5.4 Sécurité
+— Authentification JWT
+— Gestion des rôles et permissions
+— Liens de validation sécurisés (token unique)
+— Protection CORS
+— Hashage des mots de passe (BCrypt)
+5
+
+Cahier des Charges - Passerelle RH 2025 – 2026
+
+— Logs
+5.5 Déploiement & DevOps
+— Docker & Docker Compose
+— Configuration via variables d’environnement
+— GitHub Actions (CI simple)
+
+6 Conclusion
+Passerelle RH est un projet fil rouge simple, innovant et parfaitement adapté à une
+réalisation sur 3 mois. Il combine les bases solides d’un système RH classique avec une
+approche moderne orientée employabilité, tout en respectant les contraintes académiques
+et techniques de Youcode
