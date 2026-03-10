@@ -32,6 +32,12 @@ public class ValidationService {
             throw new RuntimeException("La mission n'est pas en attente de validation");
         }
 
+        // 🔐 SECURITY FIX: Verify that the authenticated validator is the one assigned
+        // to this mission
+        if (mission.getValidatorEmail() == null || !mission.getValidatorEmail().equalsIgnoreCase(validatorEmail)) {
+            throw new RuntimeException("Vous n'êtes pas autorisé à valider cette mission");
+        }
+
         User user = userRepository.findByEmail(validatorEmail)
                 .orElseThrow(() -> new RuntimeException("Validateur non trouvé"));
 
