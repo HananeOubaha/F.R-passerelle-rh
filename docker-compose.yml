@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+
+  # ---- PostgreSQL Database ----
+  postgres:
+    image: postgres:15-alpine
+    container_name: passerelle-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: passerelle_rh
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---- Spring Boot Backend ----
+  backend:
+    build:
+      context: ./passerelle-rh-backend
+      dockerfile: Dockerfile
+    container_name: passerelle-backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/passerelle_rh
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+    ports:
+      - "8080:8080"
+
+  # ---- Angular Frontend ----
+  frontend:
+    build:
+      context: ./passerelle-rh-frontend
+      dockerfile: Dockerfile
+    container_name: passerelle-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  postgres_data:
