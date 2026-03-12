@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
-
 import { adminGuard } from './guards/admin.guard';
+import { profileResolver } from './resolvers/profile.resolver';
+import { missionsResolver } from './resolvers/missions.resolver';
+import { adminStatsResolver } from './resolvers/admin-stats.resolver';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -16,7 +18,8 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        resolve: { profile: profileResolver, missions: missionsResolver }
     },
     {
         path: 'validateur',
@@ -26,12 +29,14 @@ export const routes: Routes = [
     {
         path: 'passeport',
         loadComponent: () => import('./components/passeport-rh/passeport-rh.component').then(m => m.PasseportRHComponent),
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        resolve: { profile: profileResolver }
     },
     {
         path: 'admin',
         loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
-        canActivate: [adminGuard]
+        canActivate: [adminGuard],
+        resolve: { stats: adminStatsResolver }
     },
     {
         path: 'admin/users',
