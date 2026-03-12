@@ -15,29 +15,40 @@
 
     <!-- Add Form -->
     <div *ngIf="showForm" class="border-t border-slate-100 px-6 py-6 bg-slate-50/50">
-        <form (ngSubmit)="onSubmit()" class="space-y-5 max-w-3xl">
+        <form [formGroup]="missionForm" (ngSubmit)="onSubmit()" class="space-y-5 max-w-3xl">
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Titre *</label>
-                <input type="text" [(ngModel)]="newMission.titre" name="titre" required
-                    class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all"
+                <input type="text" formControlName="titre"
+                    [class]="titre?.invalid && titre?.touched ?
+                        'w-full px-4 py-3 border border-red-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 text-sm bg-white transition-all' :
+                        'w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all'"
                     placeholder="Ex: Stage développement web">
+                <p *ngIf="titre?.hasError('required') && titre?.touched" class="mt-1 text-xs text-red-600">📝 Titre requis</p>
+                <p *ngIf="titre?.hasError('minlength') && titre?.touched" class="mt-1 text-xs text-red-600">📝 Minimum 5 caractères</p>
             </div>
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Description</label>
-                <textarea [(ngModel)]="newMission.description" name="description" rows="3"
+                <textarea formControlName="description" rows="3"
                     class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all resize-none"
                     placeholder="Décrivez brièvement la mission..."></textarea>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date de début</label>
-                    <input type="date" [(ngModel)]="newMission.dateDebut" name="dateDebut"
-                        class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date de début *</label>
+                    <input type="date" formControlName="dateDebut"
+                        [class]="dateDebut?.invalid && dateDebut?.touched ?
+                            'w-full px-4 py-3 border border-red-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 text-sm bg-white transition-all' :
+                            'w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all'">
+                    <p *ngIf="dateDebut?.hasError('required') && dateDebut?.touched" class="mt-1 text-xs text-red-600">📅 Date de début requise</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date de fin</label>
-                    <input type="date" [(ngModel)]="newMission.dateFin" name="dateFin"
-                        class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date de fin *</label>
+                    <input type="date" formControlName="dateFin"
+                        [class]="(dateFin?.invalid && dateFin?.touched) || (missionForm.hasError('dateFuture') && dateFin?.touched) ?
+                            'w-full px-4 py-3 border border-red-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 text-sm bg-white transition-all' :
+                            'w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all'">
+                    <p *ngIf="dateFin?.hasError('required') && dateFin?.touched" class="mt-1 text-xs text-red-600">📅 Date de fin requise</p>
+                    <p *ngIf="missionForm.hasError('dateFuture') && dateFin?.touched" class="mt-1 text-xs text-red-600">⚠️ La date de fin doit être après la date de début</p>
                 </div>
             </div>
             <div>
@@ -46,23 +57,30 @@
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     </div>
-                    <input type="email" [(ngModel)]="newMission.validatorEmail" name="validatorEmail" required
-                        placeholder="manager@entreprise.com"
-                        class="pl-10 w-full px-4 py-3 border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all">
+                    <input type="email" formControlName="validatorEmail"
+                        placeholder="manager&#64;entreprise.com"
+                        [class]="validatorEmail?.invalid && validatorEmail?.touched ?
+                            'pl-10 w-full px-4 py-3 border border-red-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500 text-sm bg-white transition-all' :
+                            'pl-10 w-full px-4 py-3 border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm bg-white transition-all'">
                 </div>
-                <p class="mt-1 text-[10px] text-slate-500">L'email du manager ou tuteur qui validera cette mission.</p>
+                <p *ngIf="validatorEmail?.hasError('required') && validatorEmail?.touched" class="mt-1 text-xs text-red-600">📧 Email validateur requis</p>
+                <p *ngIf="validatorEmail?.hasError('email') && validatorEmail?.touched" class="mt-1 text-xs text-red-600">📧 Format email invalide</p>
+                <p *ngIf="!validatorEmail?.invalid || !validatorEmail?.touched" class="mt-1 text-[10px] text-slate-500">L'email du manager ou tuteur qui validera cette mission.</p>
             </div>
 
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-2">Compétences mobilisées *</label>
                 <div class="flex flex-wrap gap-2">
                     <button type="button" *ngFor="let comp of userCompetences" (click)="toggleCompetence(comp.id)"
-                        [class]="selectedCompetenceIds.includes(comp.id)
+                        [class]="isCompetenceSelected(comp.id)
                             ? 'px-4 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/20 transition-all duration-200'
                             : 'px-4 py-2 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 transition-all duration-200'">
                         {{ comp.nom }}
                     </button>
                 </div>
+                <p *ngIf="competenceIds?.hasError('required') && competenceIds?.touched" class="mt-2 text-xs text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-100">
+                    ⚠️ Sélectionnez au moins une compétence
+                </p>
                 <p *ngIf="userCompetences.length === 0" class="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg border border-amber-100 mt-2">
                     ⚠️ Ajoutez des compétences à votre profil pour les sélectionner ici.
                 </p>
@@ -74,8 +92,8 @@
             </div>
 
             <div class="flex justify-end">
-                <button type="submit" [disabled]="isSubmitting || !newMission.titre"
-                    class="inline-flex items-center px-6 py-3 text-sm font-bold rounded-xl text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 shadow-lg shadow-indigo-500/20 disabled:opacity-50 transition-all active:scale-95">
+                <button type="submit" [disabled]="missionForm.invalid || isSubmitting"
+                    class="inline-flex items-center px-6 py-3 text-sm font-bold rounded-xl text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 shadow-lg shadow-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95">
                     <span *ngIf="isSubmitting" class="flex items-center gap-2">
                         <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                         Envoi...

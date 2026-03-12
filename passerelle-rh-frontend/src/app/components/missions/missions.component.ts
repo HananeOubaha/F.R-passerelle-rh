@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AuthService, Mission, CreateMissionRequest } from '../../services/auth.service';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService, Mission } from '../../services/auth.service';
+import { dateFutureValidator } from '../../validators/custom.validators';
 
 @Component({
   selector: 'app-missions',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './missions.component.html',
   styleUrl: './missions.component.css'
 })
@@ -17,24 +18,37 @@ export class MissionsComponent implements OnInit {
   showForm = false;
   errorMessage = '';
 
-  newMission: CreateMissionRequest = {
-    titre: '',
-    description: '',
-    dateDebut: '',
-    dateFin: '',
-    validatorEmail: '',
-    competenceIds: []
-  };
-
+  missionForm!: FormGroup;
   userCompetences: any[] = [];
-  selectedCompetenceIds: number[] = [];
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
+    this.initForm();
     this.loadMissions();
     this.loadUserProfile();
   }
+
+  initForm(): void {
+    this.missionForm = this.fb.group({
+      titre: ['', [Validators.required, Validators.minLength(5)]],
+      description: [''],
+      dateDebut: ['', Validators.required],
+      dateFin: ['', Validators.required],
+      validatorEmail: ['', [Validators.required, Validators.email]],
+      competenceIds: [[], Validators.required]
+    }, { validators: dateFutureValidator });
+  }
+
+  // Helpers
+  get titre() { return this.missionForm.get('titre'); }
+  get dateDebut() { return this.missionForm.get('dateDebut'); }
+  get dateFin() { return this.missionForm.get('dateFin'); }
+  get validatorEmail() { return this.missionForm.get('validatorEmail'); }
+  get competenceIds() { return this.missionForm.get('competenceIds'); }
 
   loadUserProfile(): void {
     this.authService.getProfile().subscribe({
@@ -58,15 +72,33 @@ export class MissionsComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    if (!this.newMission.titre.trim()) return;
-    this.newMission.competenceIds = this.selectedCompetenceIds;
-    this.isSubmitting = true;
+  toggleCompetence(id: number): void {
+    const currentIds: number[] = this.missionForm.get('competenceIds')?.value || [];
+    const index = currentIds.indexOf(id);
+    if (index > -1) {
+      currentIds.splice(index, 1);
+    } else {
+      currentIds.push(id);
+    }
+    this.missionForm.patchValue({ competenceIds: currentIds });
+  }
 
-    this.authService.createMission(this.newMission).subscribe({
+  isCompetenceSelected(id: number): boolean {
+    const currentIds: number[] = this.missionForm.get('competenceIds')?.value || [];
+    return currentIds.includes(id);
+  }
+
+  onSubmit(): void {
+    if (this.missionForm.invalid) {
+      this.missionForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.authService.createMission(this.missionForm.value).subscribe({
       next: (created) => {
         this.missions.unshift(created);
-        this.resetForm();
+        this.missionForm.reset({ competenceIds: [], validatorEmail: '', titre: '', description: '', dateDebut: '', dateFin: '' });
         this.isSubmitting = false;
         this.showForm = false;
       },
@@ -107,12 +139,6 @@ export class MissionsComponent implements OnInit {
     });
   }
 
-  resetForm(): void {
-    this.newMission = { titre: '', description: '', dateDebut: '', dateFin: '', validatorEmail: '', competenceIds: [] };
-    this.selectedCompetenceIds = [];
-    this.errorMessage = '';
-  }
-
   statutLabel(statut: string): string {
     return { PENDING: 'En attente', VALIDATED: 'Validée', REJECTED: 'Rejetée' }[statut] ?? statut;
   }
@@ -123,14 +149,5 @@ export class MissionsComponent implements OnInit {
       VALIDATED: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
       REJECTED: 'bg-red-50 text-red-700 border border-red-200'
     }[statut] ?? 'bg-slate-100 text-slate-600';
-  }
-
-  toggleCompetence(id: number): void {
-    const index = this.selectedCompetenceIds.indexOf(id);
-    if (index > -1) {
-      this.selectedCompetenceIds.splice(index, 1);
-    } else {
-      this.selectedCompetenceIds.push(id);
-    }
   }
 }
