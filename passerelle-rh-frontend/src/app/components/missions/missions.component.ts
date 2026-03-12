@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, Mission } from '../../services/auth.service';
 import { dateFutureValidator } from '../../validators/custom.validators';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { DateRelativePipe } from '../../pipes/date-relative.pipe';
 
 @Component({
   selector: 'app-missions',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TruncatePipe, DateRelativePipe],
   templateUrl: './missions.component.html',
   styleUrl: './missions.component.css'
 })
