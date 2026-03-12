@@ -27,6 +27,7 @@ public class MissionController {
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
     private final com.passerellerh.repository.CompetenceRepository competenceRepository;
+    private final com.passerellerh.service.EmailService emailService;
 
     @GetMapping
     public ResponseEntity<List<MissionDTO>> getMissions(@AuthenticationPrincipal UserDetails userDetails) {
@@ -66,6 +67,10 @@ public class MissionController {
                     }
 
                     Mission saved = missionRepository.save(mission);
+
+                    // Envoyer une invitation par email au validateur
+                    emailService.sendValidationInvitation(saved);
+
                     return ResponseEntity.ok(toDto(saved));
                 })
                 .orElse(ResponseEntity.badRequest().build());
