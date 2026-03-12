@@ -52,3 +52,7 @@ springdoc:
     operationsSorter: method
     tagsSorter: alpha
     disable-swagger-default-url: true
+
+app:
+  frontend-url: http://localhost:4200
+
