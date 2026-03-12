@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { AuthService, UserProfile } from '../../services/auth.service';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-passeport-rh',
@@ -226,10 +226,31 @@ export class PasseportRHComponent implements OnInit {
     avgScore = 0;
     topCompetence = '—';
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit(): void {
-        this.loadData();
+        // Profil pré-chargé par le profileResolver
+        this.route.data.subscribe(data => {
+            if (data['profile']) {
+                this.userProfile = data['profile'];
+                this.loadValidationsOnly();
+            } else {
+                this.loadData();
+            }
+        });
+    }
+
+    /**
+     * Charge uniquement les validations quand le profil est déjà résolu.
+     */
+    loadValidationsOnly(): void {
+        this.authService.getReceivedValidations().subscribe(validations => {
+            this.validations = validations.sort((a: any, b: any) =>
+                new Date(a.dateValidation).getTime() - new Date(b.dateValidation).getTime()
+            );
+            this.prepareCharts();
+            this.isLoading = false;
+        });
     }
 
     loadData(): void {

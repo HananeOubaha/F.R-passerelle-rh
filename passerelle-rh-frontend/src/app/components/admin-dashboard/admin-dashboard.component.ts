@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { AdminService, AdminStats } from '../../services/admin.service';
@@ -50,10 +50,19 @@ export class AdminDashboardComponent implements OnInit {
     datasets: [{ data: [], backgroundColor: '#10B981', borderRadius: 8 }]
   };
 
-  constructor(private adminService: AdminService, private authService: AuthService) { }
+  constructor(private adminService: AdminService, private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.loadStats();
+    // Données pré-chargées par le adminStatsResolver
+    this.route.data.subscribe(data => {
+      if (data['stats']) {
+        this.stats = data['stats'];
+        this.prepareCharts();
+        this.isLoading = false;
+      } else {
+        this.loadStats();
+      }
+    });
   }
 
   loadStats(): void {

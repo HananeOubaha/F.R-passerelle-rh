@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, UserProfile, UpdateProfileRequest } from '../../services/auth.service';
 import { MissionsComponent } from '../missions/missions.component';
 
@@ -33,7 +33,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   addCompetence(): void {
@@ -72,7 +73,17 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadProfile();
+    // Données pré-chargées par le profileResolver
+    this.route.data.subscribe(data => {
+      if (data['profile']) {
+        this.userProfile = data['profile'];
+        this.isLoading = false;
+        this.resetForm();
+      } else {
+        // Fallback si pas de resolver (accès direct)
+        this.loadProfile();
+      }
+    });
   }
 
 
