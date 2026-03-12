@@ -34,6 +34,7 @@ public class ValidationController {
     private final UserRepository userRepository;
     private final com.passerellerh.repository.CompetenceRepository competenceRepository;
     private final com.passerellerh.service.ValidationService validationService;
+    private final com.passerellerh.service.EmailService emailService;
 
     /** List all PENDING missions visible to a Validateur */
     @GetMapping("/pending")
@@ -74,6 +75,8 @@ public class ValidationController {
                 .map(m -> {
                     m.setStatut(StatutMission.REJECTED);
                     missionRepository.save(m);
+                    // Notifier l'utilisateur par email du rejet
+                    emailService.sendMissionRejectedNotification(m, reason);
                     return ResponseEntity.ok(toMissionDto(m));
                 })
                 .orElse(ResponseEntity.notFound().build());

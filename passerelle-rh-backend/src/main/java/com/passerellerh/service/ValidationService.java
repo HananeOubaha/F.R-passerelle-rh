@@ -22,6 +22,7 @@ public class ValidationService {
     private final UserRepository userRepository;
     private final CompetenceRepository competenceRepository;
     private final PasseportService passeportService;
+    private final EmailService emailService;
 
     @Transactional
     public Validation validateMission(Long missionId, String validatorEmail, ValidateMissionRequest request) {
@@ -94,6 +95,9 @@ public class ValidationService {
             // Check badges
             passeportService.checkAndAssignBadges(utilisateur);
         }
+
+        // Notifier l'utilisateur par email
+        emailService.sendMissionValidatedNotification(mission);
 
         return savedValidation;
     }
