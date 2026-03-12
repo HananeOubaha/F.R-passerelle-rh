@@ -9,6 +9,9 @@ import com.passerellerh.repository.MissionRepository;
 import com.passerellerh.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,6 +43,31 @@ public class MissionController {
                     return ResponseEntity.ok(missions);
                 })
                 .orElse(ResponseEntity.ok(List.of()));
+    }
+
+    /**
+     * Endpoint paginé pour les missions de l'utilisateur connecté.
+     * Supporte tri (?sort=dateDebut,desc) et filtrage par statut (?statut=VALIDATED).
+     */
+    @GetMapping("/page")
+    public ResponseEntity<Page<MissionDTO>> getMissionsPaginated(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(required = false) StatutMission statut,
+            @PageableDefault(size = 10, sort = "dateDebut", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
+
+        return userRepository.findByEmail(userDetails.getUsername())
+                .filter(Utilisateur.class::isInstance)
+                .map(Utilisateur.class::cast)
+                .map(u -> {
+                    Page<Mission> page;
+                    if (statut != null) {
+                        page = missionRepository.findByUtilisateurIdAndStatut(u.getId(), statut, pageable);
+                    } else {
+                        page = missionRepository.findByUtilisateurId(u.getId(), pageable);
+                    }
+                    return ResponseEntity.ok(page.map(this::toDto));
+                })
+                .orElse(ResponseEntity.ok(Page.empty()));
     }
 
     @PostMapping
