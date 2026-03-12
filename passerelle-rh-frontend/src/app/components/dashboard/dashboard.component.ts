@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, UserProfile, UpdateProfileRequest } from '../../services/auth.service';
 import { MissionsComponent } from '../missions/missions.component';
+import { ScorePipe } from '../../pipes/score.pipe';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, MissionsComponent, RouterModule],
+  imports: [CommonModule, FormsModule, MissionsComponent, RouterModule, ScorePipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
