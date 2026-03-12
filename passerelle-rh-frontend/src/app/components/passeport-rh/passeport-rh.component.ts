@@ -4,11 +4,13 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { AuthService, UserProfile } from '../../services/auth.service';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { ScorePipe } from '../../pipes/score.pipe';
+import { DateRelativePipe } from '../../pipes/date-relative.pipe';
 
 @Component({
     selector: 'app-passeport-rh',
     standalone: true,
-    imports: [CommonModule, BaseChartDirective, RouterModule],
+    imports: [CommonModule, BaseChartDirective, RouterModule, ScorePipe, DateRelativePipe],
     templateUrl: './passeport-rh.component.html',
     styleUrl: './passeport-rh.component.css'
 })
