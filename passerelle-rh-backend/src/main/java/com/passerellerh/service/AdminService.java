@@ -1,6 +1,7 @@
 package com.passerellerh.service;
 
 import com.passerellerh.dto.AdminStatsDTO;
+import com.passerellerh.dto.UserResponseDTO;
 import com.passerellerh.enums.Role;
 import com.passerellerh.enums.StatutMission;
 import com.passerellerh.repository.CompetenceRepository;
@@ -8,6 +9,8 @@ import com.passerellerh.repository.MissionRepository;
 import com.passerellerh.repository.UserRepository;
 import com.passerellerh.repository.ValidationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -64,6 +67,23 @@ public class AdminService {
         return userRepository.findAll().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Récupère les utilisateurs de façon paginée avec recherche et filtrage par rôle.
+     */
+    public Page<UserResponseDTO> getUsersPaginated(String search, Role role, Pageable pageable) {
+        if (search != null && !search.isBlank() && role != null) {
+            return userRepository.findBySearchAndRole(search.toLowerCase(), role, pageable)
+                    .map(userMapper::toDto);
+        } else if (search != null && !search.isBlank()) {
+            return userRepository.findBySearch(search.toLowerCase(), pageable)
+                    .map(userMapper::toDto);
+        } else if (role != null) {
+            return userRepository.findByRole(role, pageable)
+                    .map(userMapper::toDto);
+        }
+        return userRepository.findAll(pageable).map(userMapper::toDto);
     }
 
     public void updateUserRole(Long userId, Role newRole) {
