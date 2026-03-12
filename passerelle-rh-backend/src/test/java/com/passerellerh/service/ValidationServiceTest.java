@@ -34,6 +34,8 @@ class ValidationServiceTest {
     private CompetenceRepository competenceRepository;
     @Mock
     private PasseportService passeportService;
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     private ValidationService validationService;
