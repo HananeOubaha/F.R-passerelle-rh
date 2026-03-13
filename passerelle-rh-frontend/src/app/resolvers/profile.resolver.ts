@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { ResolveFn, Router } from '@angular/router';
 import { catchError, EMPTY } from 'rxjs';
 import { AuthService, UserProfile } from '../services/auth.service';
+import { AuthFacade } from '../store/auth/auth.facade';
 
 /**
  * Resolver qui pré-charge le profil utilisateur avant d'entrer dans la route.
@@ -9,17 +10,17 @@ import { AuthService, UserProfile } from '../services/auth.service';
  */
 export const profileResolver: ResolveFn<UserProfile> = (route, state) => {
   const authService = inject(AuthService);
+  const authFacade = inject(AuthFacade);
   const router = inject(Router);
 
   return authService.getProfile().pipe(
     catchError((error) => {
       console.error('ProfileResolver: erreur chargement profil', error);
       if (error.status === 401 || error.status === 403) {
-        authService.logout();
+        authFacade.logout();
         router.navigate(['/login']);
       }
       return EMPTY;
     })
   );
 };
-

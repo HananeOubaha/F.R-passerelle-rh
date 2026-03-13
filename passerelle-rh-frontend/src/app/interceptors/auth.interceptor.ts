@@ -3,13 +3,14 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+import { AuthFacade } from '../store/auth/auth.facade';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     private isRefreshing = false;
     private refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private authFacade: AuthFacade) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const authReq = this.addAuthHeader(req, this.authService.getToken());
@@ -61,7 +62,7 @@ export class AuthInterceptor implements HttpInterceptor {
                 }),
                 catchError((refreshError) => {
                     this.isRefreshing = false;
-                    this.authService.logout();
+                    this.authFacade.logout();
                     return throwError(() => refreshError);
                 })
             );
