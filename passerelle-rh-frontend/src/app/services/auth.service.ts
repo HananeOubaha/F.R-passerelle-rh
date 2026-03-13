@@ -104,6 +104,13 @@ export class AuthService {
     );
   }
 
+  refreshAccessToken(): Observable<AuthResponse> {
+    const refreshToken = this.getRefreshToken();
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { refreshToken }).pipe(
+      tap(response => this.updateTokens(response))
+    );
+  }
+
   getProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(`${this.usersUrl}/me`);
   }
@@ -175,6 +182,20 @@ export class AuthService {
     this.currentUserSubject.next(authResult);
   }
 
+  private updateTokens(authResult: AuthResponse): void {
+    const currentUser = this.getUser();
+    const mergedUser: AuthResponse = {
+      ...authResult,
+      userId: authResult.userId || currentUser?.userId || 0,
+      email: authResult.email || currentUser?.email || '',
+      role: authResult.role || currentUser?.role || ''
+    };
+    localStorage.setItem('access_token', mergedUser.accessToken);
+    localStorage.setItem('refresh_token', mergedUser.refreshToken);
+    localStorage.setItem('user', JSON.stringify(mergedUser));
+    this.currentUserSubject.next(mergedUser);
+  }
+
   getUser(): AuthResponse | null {
     return this.currentUserSubject.value;
   }
@@ -186,6 +207,10 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('access_token');
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refresh_token');
   }
 
   isLoggedIn(): boolean {
