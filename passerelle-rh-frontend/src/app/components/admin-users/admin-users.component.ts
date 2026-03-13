@@ -18,7 +18,11 @@ export class AdminUsersComponent implements OnInit {
     selectedRole = '';
     isLoading = true;
 
-    roles = ['ADMIN', 'UTILISATEUR', 'VALIDATEUR'];
+    roles = [
+        { label: 'Administrateur', value: 'ADMIN' },
+        { label: 'Utilisateur', value: 'USER' },
+        { label: 'Validateur', value: 'VALIDATOR' }
+    ];
 
     constructor(private adminService: AdminService) { }
 
