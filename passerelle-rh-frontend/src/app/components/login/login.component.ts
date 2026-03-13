@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { Subject, combineLatest } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+import { AuthFacade } from '../../store/auth/auth.facade';
 
 @Component({
   selector: 'app-login',
@@ -11,14 +13,15 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   errorMessage: string = '';
   isLoading: boolean = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private authFacade: AuthFacade,
     private router: Router
   ) { }
 
@@ -27,6 +30,30 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+
+    this.authFacade.loading$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((loading) => (this.isLoading = loading));
+
+    this.authFacade.error$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((error) => (this.errorMessage = error || ''));
+
+    combineLatest([this.authFacade.user$, this.authFacade.loading$])
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(([user, loading]) => !!user && !loading)
+      )
+      .subscribe(([user]) => {
+        const role = user!.role;
+        if (role === 'VALIDATOR') {
+          this.router.navigate(['/validateur']);
+        } else if (role === 'ADMIN') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
+      });
   }
 
   // Helper pour récupérer facilement les contrôles
@@ -39,28 +66,12 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
     this.errorMessage = '';
+    this.authFacade.login(this.loginForm.value);
+  }
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (response) => {
-        const role = response.role;
-        if (role === 'VALIDATOR') {
-          this.router.navigate(['/validateur']);
-        } else if (role === 'ADMIN') {
-          this.router.navigate(['/admin']);
-        } else {
-          this.router.navigate(['/dashboard']);
-        }
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Une erreur est survenue lors de la connexion';
-        console.error('Login error', error);
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
