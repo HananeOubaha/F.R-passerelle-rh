@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { AuthService, UserProfile } from '../../services/auth.service';
+import { AuthFacade } from '../../store/auth/auth.facade';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ScorePipe } from '../../pipes/score.pipe';
 import { DateRelativePipe } from '../../pipes/date-relative.pipe';
@@ -228,7 +229,7 @@ export class PasseportRHComponent implements OnInit {
     avgScore = 0;
     topCompetence = '—';
 
-    constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
+    constructor(private authService: AuthService, private authFacade: AuthFacade, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit(): void {
         // Profil pré-chargé par le profileResolver
@@ -417,7 +418,7 @@ export class PasseportRHComponent implements OnInit {
     }
 
     logout(): void {
-        this.authService.logout();
+        this.authFacade.logout();
         this.router.navigate(['/login']);
     }
 }
