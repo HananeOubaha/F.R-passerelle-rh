@@ -1,0 +1,217 @@
+<div class="min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col">
+    <!-- Navbar -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/30">
+                        <span class="text-white font-bold text-xl">P</span>
+                    </div>
+                    <span class="font-bold text-2xl tracking-tight text-slate-900">Passerelle<span
+                            class="text-blue-600">RH</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Notre
+                        Solution</a>
+                    <a href="#about" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">À
+                        Propos</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a routerLink="/login" class="text-blue-600 font-semibold hover:text-blue-700 transition-colors">Se
+                        connecter</a>
+                    <a routerLink="/register"
+                        class="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold shadow-md shadow-blue-600/30 hover:bg-blue-700 transition-all hover:-translate-y-0.5">Inscription</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="flex-grow">
+        <section class="relative bg-white overflow-hidden">
+            <div class="max-w-7xl mx-auto">
+                <div
+                    class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-20 px-4 sm:px-6 lg:px-8">
+                    <div class="sm:text-center lg:text-left">
+                        <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
+                            <span class="block xl:inline">Libérez le potentiel</span>
+                            <span class="block text-blue-600">de vos collaborateurs</span>
+                        </h1>
+                        <p
+                            class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                            Passerelle RH est la plateforme moderne pour gérer les compétences, certifier les acquis et
+                            propulser les carrières de vos équipes au niveau supérieur. Simplifiez la gestion des
+                            ressources humaines avec un outil pensé pour l'humain.
+                        </p>
+                        <div class="mt-8 sm:flex sm:justify-center lg:justify-start gap-4">
+                            <a routerLink="/register"
+                                class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 shadow-xl shadow-blue-600/20 transition-all hover:-translate-y-1">
+                                Commencer maintenant
+                            </a>
+                            <a routerLink="/login"
+                                class="mt-3 sm:mt-0 w-full flex items-center justify-center px-8 py-3 border-2 border-slate-200 text-base font-medium rounded-xl text-slate-700 bg-white hover:bg-slate-50 md:py-4 md:text-lg md:px-10 transition-all hover:-translate-y-1">
+                                Espace Client
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+                <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
+                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2850&q=80"
+                    alt="Équipe RH au travail">
+                <div class="absolute inset-0 bg-gradient-to-r from-white via-white/20 to-transparent lg:via-white/10">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Fonctionnalités</h2>
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                        Une approche moderne des RH
+                    </p>
+                    <p class="mt-4 max-w-2xl text-xl text-slate-500 mx-auto">
+                        Tout ce dont vous avez besoin pour certifier, suivre et développer les compétences de votre
+                        équipe.
+                    </p>
+                </div>
+
+                <div class="mt-16">
+                    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                        <!-- Feature 1 -->
+                        <div class="pt-6">
+                            <div
+                                class="flow-root bg-white rounded-2xl px-6 pb-8 shadow-sm border border-slate-100 h-full hover:shadow-xl transition-shadow duration-300">
+                                <div class="-mt-6">
+                                    <div>
+                                        <span
+                                            class="inline-flex items-center justify-center p-3 bg-blue-600 rounded-xl shadow-lg shadow-blue-600/30">
+                                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <h3 class="mt-8 text-lg font-bold text-slate-900 tracking-tight">Passeport de
+                                        Compétences</h3>
+                                    <p class="mt-5 text-base text-slate-500">
+                                        Délivrez des passeports certifiés et infalsifiables. Chaque collaborateur
+                                        possède un portfolio de ses accomplissements.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="pt-6">
+                            <div
+                                class="flow-root bg-white rounded-2xl px-6 pb-8 shadow-sm border border-slate-100 h-full hover:shadow-xl transition-shadow duration-300">
+                                <div class="-mt-6">
+                                    <div>
+                                        <span
+                                            class="inline-flex items-center justify-center p-3 bg-indigo-500 rounded-xl shadow-lg shadow-indigo-500/30">
+                                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <h3 class="mt-8 text-lg font-bold text-slate-900 tracking-tight">Suivi de Carrière
+                                    </h3>
+                                    <p class="mt-5 text-base text-slate-500">
+                                        Visualisez les trajectoires professionnelles. Identifiez les talents et
+                                        planifiez les évolutions de carrière de manière proactive.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="pt-6">
+                            <div
+                                class="flow-root bg-white rounded-2xl px-6 pb-8 shadow-sm border border-slate-100 h-full hover:shadow-xl transition-shadow duration-300">
+                                <div class="-mt-6">
+                                    <div>
+                                        <span
+                                            class="inline-flex items-center justify-center p-3 bg-teal-500 rounded-xl shadow-lg shadow-teal-500/30">
+                                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <h3 class="mt-8 text-lg font-bold text-slate-900 tracking-tight">Espace Collaboratif
+                                    </h3>
+                                    <p class="mt-5 text-base text-slate-500">
+                                        Connectez les managers, les RH et les employés sur une plateforme unique pour
+                                        valider les missions et les compétences.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="bg-blue-900 py-16 relative overflow-hidden">
+            <!-- Decorative background -->
+            <div class="absolute inset-0 opacity-10">
+                <svg class="absolute left-full transform -translate-x-1/2 -translate-y-1/4" width="404" height="784"
+                    fill="none" viewBox="0 0 404 784">
+                    <defs>
+                        <pattern id="b1e6e422-73f8-40a5-b5f9-2fac7f0e7eb5" x="0" y="0" width="20" height="20"
+                            patternUnits="userSpaceOnUse">
+                            <rect x="0" y="0" width="4" height="4" fill="currentColor"></rect>
+                        </pattern>
+                    </defs>
+                    <rect width="404" height="784" fill="url(#b1e6e422-73f8-40a5-b5f9-2fac7f0e7eb5)"></rect>
+                </svg>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-2 gap-8 md:grid-cols-4 text-center">
+                    <div>
+                        <p class="text-5xl font-extrabold text-white">100%</p>
+                        <p class="mt-2 text-lg font-medium text-blue-200">Certifié</p>
+                    </div>
+                    <div>
+                        <p class="text-5xl font-extrabold text-white">50k+</p>
+                        <p class="mt-2 text-lg font-medium text-blue-200">Passeports générés</p>
+                    </div>
+                    <div>
+                        <p class="text-5xl font-extrabold text-white">24/7</p>
+                        <p class="mt-2 text-lg font-medium text-blue-200">Disponibilité</p>
+                    </div>
+                    <div>
+                        <p class="text-5xl font-extrabold text-white">RGPD</p>
+                        <p class="mt-2 text-lg font-medium text-blue-200">Conformité</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 py-12 text-center text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-center flex-col items-center">
+                <div class="flex justify-center items-center gap-2 mb-4">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold">P</span>
+                    </div>
+                    <span class="font-bold text-xl text-white">Passerelle<span class="text-blue-500">RH</span></span>
+                </div>
+                <p>&copy; 2026 Passerelle RH. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+</div>
