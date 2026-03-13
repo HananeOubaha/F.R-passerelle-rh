@@ -1,0 +1,79 @@
+name: CI — Passerelle RH
+
+on:
+  push:
+    branches: [ main, develop, "copilot/**" ]
+  pull_request:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Backend — Spring Boot / Maven (JDK 17)
+  # ─────────────────────────────────────────────
+  backend:
+    name: Backend Build & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and run unit tests
+        working-directory: passerelle-rh-backend
+        run: ./mvnw -B test --no-transfer-progress
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-reports
+          path: passerelle-rh-backend/target/surefire-reports/
+          retention-days: 7
+
+  # ─────────────────────────────────────────────
+  # Frontend — Angular 17 / Node 20
+  # ─────────────────────────────────────────────
+  frontend:
+    name: Frontend Build & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: passerelle-rh-frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: passerelle-rh-frontend
+        run: npm ci
+
+      - name: Build production bundle
+        working-directory: passerelle-rh-frontend
+        run: npm run build
+
+      - name: Run unit tests (ChromeHeadless)
+        working-directory: passerelle-rh-frontend
+        run: npm test -- --watch=false --browsers=ChromeHeadless --no-progress
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: passerelle-rh-frontend/coverage/
+          retention-days: 7
