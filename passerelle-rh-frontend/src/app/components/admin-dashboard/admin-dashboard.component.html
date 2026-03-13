@@ -1,22 +1,22 @@
 <div class="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-[#1E293B]">
     <!-- Navbar -->
-    <nav class="bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700 sticky top-0 z-50">
+    <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
             <div class="flex items-center gap-2.5">
                 <div
-                    class="w-9 h-9 bg-gradient-to-tr from-emerald-400 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                    <span class="text-white font-black text-lg">P</span>
+                    class="w-9 h-9 bg-gradient-to-tr from-blue-400 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <span class="text-white font-bold text-xl">P</span>
                 </div>
-                <span class="text-xl font-extrabold tracking-tight text-white">PASSERELLE <span
-                        class="text-emerald-400">RH</span></span>
+                <span class="text-xl font-extrabold tracking-tight text-slate-900">PASSERELLE <span
+                        class="text-blue-400">RH</span></span>
                 <span
-                    class="ml-3 px-3 py-1 bg-emerald-500/20 text-emerald-300 text-[10px] font-black uppercase tracking-widest rounded-full border border-emerald-500/30">
+                    class="ml-3 px-3 py-1 bg-blue-500/20 text-blue-300 text-[10px] font-black uppercase tracking-widest rounded-full border border-blue-500/30">
                     Console Admin
                 </span>
             </div>
             <div class="flex items-center gap-4">
                 <a routerLink="/dashboard"
-                    class="text-sm font-semibold text-slate-300 hover:text-white transition-colors">Vue Utilisateur</a>
+                    class="text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors">Vue Utilisateur</a>
                 <button (click)="logout()"
                     class="px-4 py-2 text-sm font-bold text-white bg-white/10 rounded-xl hover:bg-white/20 transition-all">
                     Déconnexion
@@ -35,7 +35,7 @@
 
         <!-- Loader -->
         <div *ngIf="isLoading" class="flex flex-col items-center justify-center h-64">
-            <div class="w-16 h-16 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin"></div>
+            <div class="w-16 h-16 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin"></div>
             <p class="mt-4 text-slate-500 font-semibold animate-pulse">Chargement des statistiques...</p>
         </div>
 
@@ -44,13 +44,13 @@
             <!-- Management Navigation -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
                 <button routerLink="/admin/users"
-                    class="group relative overflow-hidden bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 hover:border-emerald-200 transition-all text-left">
+                    class="group relative overflow-hidden bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 hover:border-blue-200 transition-all text-left">
                     <div
                         class="absolute -right-4 -bottom-4 text-9xl opacity-5 group-hover:scale-110 transition-transform">
-                        👥</div>
+                        </div>
                     <div class="relative z-10">
                         <div
-                            class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-emerald-500 group-hover:text-white transition-all text-emerald-600">
+                            class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-blue-500 group-hover:text-white transition-all text-blue-600">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -66,7 +66,7 @@
                     class="group relative overflow-hidden bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 hover:border-indigo-200 transition-all text-left">
                     <div
                         class="absolute -right-4 -bottom-4 text-9xl opacity-5 group-hover:scale-110 transition-transform">
-                        ⚙️</div>
+                        </div>
                     <div class="relative z-10">
                         <div
                             class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-indigo-500 group-hover:text-white transition-all text-indigo-600">
@@ -104,8 +104,8 @@
                 </div>
 
                 <div class="kpi-card bg-white border border-slate-100 flex items-center gap-6">
-                    <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                        <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center">
+                        <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
@@ -117,8 +117,8 @@
                 </div>
 
                 <div class="kpi-card bg-white border border-slate-100 flex items-center gap-6">
-                    <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center">
-                        <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center">
+                        <svg class="w-7 h-7 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -147,7 +147,7 @@
                 <!-- Missions Status -->
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
                     <h2 class="section-title mb-8">
-                        <span class="dot bg-emerald-500"></span>
+                        <span class="dot bg-blue-500"></span>
                         Statuts des Missions
                     </h2>
                     <div class="h-[300px]">
