@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, Mission } from '../../services/auth.service';
+import { AuthFacade } from '../../store/auth/auth.facade';
 
 interface ScoreForm {
   competenceScores: { [key: number]: number };
@@ -34,7 +35,7 @@ export class ValidateurDashboardComponent implements OnInit {
   isSubmitting = false;
   successMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private authFacade: AuthFacade, private router: Router) { }
 
   ngOnInit(): void {
     const user = this.authService.getUser();
@@ -116,7 +117,7 @@ export class ValidateurDashboardComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authFacade.logout();
     this.router.navigate(['/login']);
   }
 }
