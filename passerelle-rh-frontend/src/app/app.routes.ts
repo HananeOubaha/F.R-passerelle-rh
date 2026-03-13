@@ -6,7 +6,10 @@ import { missionsResolver } from './resolvers/missions.resolver';
 import { adminStatsResolver } from './resolvers/admin-stats.resolver';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    {
+        path: '',
+        loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+    },
     {
         path: 'login',
         loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)
