@@ -122,4 +122,22 @@ public class AuthService {
                 return new AuthResponse(accessToken, refreshToken, utilisateur.getId(),
                                 utilisateur.getEmail(), utilisateur.getRole().name());
         }
+
+        public AuthResponse refreshToken(String refreshToken) {
+                String email = jwtUtil.extractUsername(refreshToken);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+                if (!jwtUtil.validateToken(refreshToken, userDetails)) {
+                        throw new RuntimeException("Invalid refresh token");
+                }
+
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+
+                String newAccessToken = jwtUtil.generateToken(userDetails);
+                String newRefreshToken = jwtUtil.generateRefreshToken(userDetails);
+
+                return new AuthResponse(newAccessToken, newRefreshToken, user.getId(), user.getEmail(),
+                                user.getRole().name());
+        }
 }

@@ -3,6 +3,7 @@ package com.passerellerh.controller;
 import com.passerellerh.dto.AuthRequest;
 import com.passerellerh.dto.AuthResponse;
 import com.passerellerh.dto.RegisterRequest;
+import com.passerellerh.dto.RefreshTokenRequest;
 import com.passerellerh.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        return ResponseEntity.ok(authService.refreshToken(request.getRefreshToken()));
     }
 
     @org.springframework.web.bind.annotation.GetMapping("/oauth2/success")
