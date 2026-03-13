@@ -142,4 +142,48 @@ class AuthServiceTest {
 
         assertThrows(BadCredentialsException.class, () -> authService.login(request));
     }
+
+    @Test
+    @DisplayName("✅ Refresh token valide — retourne de nouveaux tokens")
+    void refreshToken_validToken_returnsNewTokens() {
+        String refreshToken = "valid_refresh";
+
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(1L);
+        utilisateur.setEmail("jean@test.com");
+        utilisateur.setRole(Role.USER);
+
+        UserDetails mockDetails = new org.springframework.security.core.userdetails.User(
+                "jean@test.com", "hashed", List.of(new SimpleGrantedAuthority("ROLE_USER")));
+
+        when(jwtUtil.extractUsername(refreshToken)).thenReturn("jean@test.com");
+        when(userDetailsService.loadUserByUsername("jean@test.com")).thenReturn(mockDetails);
+        when(jwtUtil.validateToken(refreshToken, mockDetails)).thenReturn(true);
+        when(userRepository.findByEmail("jean@test.com")).thenReturn(Optional.of(utilisateur));
+        when(jwtUtil.generateToken(mockDetails)).thenReturn("new_access_token");
+        when(jwtUtil.generateRefreshToken(mockDetails)).thenReturn("new_refresh_token");
+
+        AuthResponse response = authService.refreshToken(refreshToken);
+
+        assertNotNull(response);
+        assertEquals("new_access_token", response.getAccessToken());
+        assertEquals("new_refresh_token", response.getRefreshToken());
+        assertEquals("jean@test.com", response.getEmail());
+    }
+
+    @Test
+    @DisplayName("❌ Refresh token invalide — lève une exception")
+    void refreshToken_invalidToken_throwsException() {
+        String refreshToken = "invalid_refresh";
+
+        UserDetails mockDetails = new org.springframework.security.core.userdetails.User(
+                "jean@test.com", "hashed", List.of(new SimpleGrantedAuthority("ROLE_USER")));
+
+        when(jwtUtil.extractUsername(refreshToken)).thenReturn("jean@test.com");
+        when(userDetailsService.loadUserByUsername("jean@test.com")).thenReturn(mockDetails);
+        when(jwtUtil.validateToken(refreshToken, mockDetails)).thenReturn(false);
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> authService.refreshToken(refreshToken));
+        assertEquals("Invalid refresh token", ex.getMessage());
+    }
 }
