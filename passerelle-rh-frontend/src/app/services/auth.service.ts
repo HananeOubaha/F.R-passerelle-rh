@@ -182,6 +182,14 @@ export class AuthService {
   }
 
   getReceivedValidations(): Observable<any[]> {
+    const userRole = this.getUser()?.role;
+    if (userRole === 'ADMIN' || userRole === 'VALIDATOR') {
+      import('rxjs').then(({ of }) => of([]));
+      return new Observable<any[]>(subscriber => {
+        subscriber.next([]);
+        subscriber.complete();
+      });
+    }
     return this.http.get<any[]>('http://localhost:8080/api/validation/my-validations');
   }
 
