@@ -1,19 +1,19 @@
 <div class="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-[#1E293B]">
     <!-- Navbar Header -->
-    <nav class="bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-50">
+    <nav class="bg-white/90 backdrop-blur-md/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2.5">
                     <div
                         class="w-9 h-9 bg-gradient-to-tr from-slate-700 to-slate-800 rounded-xl flex items-center justify-center shadow-lg shadow-slate-500/20">
-                        <span class="text-white font-black text-lg">A</span>
+                        <span class="text-white font-bold text-xl">A</span>
                     </div>
                     <span class="text-xl font-extrabold tracking-tight text-slate-800">CONSOLE <span
-                            class="text-emerald-600">ADMIN</span></span>
+                            class="text-blue-600">ADMIN</span></span>
                 </div>
                 <div class="flex items-center gap-4">
                     <a routerLink="/admin"
-                        class="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all">
+                        class="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all">
                         ← Dashboard
                     </a>
                     <button routerLink="/admin/users"
@@ -28,7 +28,7 @@
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
         <!-- Header Section -->
         <div class="mb-10 text-center md:text-left">
-            <p class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-1">Configuration
+            <p class="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em] mb-1">Configuration
                 Référentiels</p>
             <h1 class="text-3xl font-black text-slate-800">Gestion des Ressources</h1>
             <p class="text-sm text-slate-500 font-medium">Définissez les compétences disponibles et les badges de
@@ -39,12 +39,12 @@
         <div class="flex gap-2 mb-8 bg-slate-100 p-1.5 rounded-2xl w-fit mx-auto md:mx-0">
             <button (click)="activeTab = 'competences'"
                 class="px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all"
-                [ngClass]="activeTab === 'competences' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+                [ngClass]="activeTab === 'competences' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
                 Compétences
             </button>
             <button (click)="activeTab = 'badges'"
                 class="px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest transition-all"
-                [ngClass]="activeTab === 'badges' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+                [ngClass]="activeTab === 'badges' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
                 Badges
             </button>
         </div>
@@ -58,7 +58,7 @@
                     <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4">Nouvelle Compétence
                     </h3>
                     <input type="text" [(ngModel)]="newCompetenceName" placeholder="Nom de la compétence..."
-                        class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all mb-4">
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all mb-4">
                     <button (click)="addCompetence()" [disabled]="!newCompetenceName"
                         class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-slate-200 disabled:opacity-50">
                         Ajouter au référentiel
@@ -103,24 +103,24 @@
                                 class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Nom
                                 du Badge</label>
                             <input type="text" [(ngModel)]="newBadge.nom" placeholder="Ex: Expert"
-                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-emerald-500 transition-all">
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-blue-500 transition-all">
                         </div>
                         <div>
                             <label
                                 class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Seuil
                                 Score (%)</label>
                             <input type="number" [(ngModel)]="newBadge.seuilScore"
-                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-emerald-500 transition-all">
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-blue-500 transition-all">
                         </div>
                         <div>
                             <label
                                 class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Emoji
                                 / Icône</label>
                             <input type="text" [(ngModel)]="newBadge.iconeUrl" placeholder="Ex: 🏆 ou URL"
-                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-emerald-500 transition-all">
+                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none border focus:border-blue-500 transition-all">
                         </div>
                         <button (click)="addBadge()" [disabled]="!newBadge.nom || !newBadge.iconeUrl"
-                            class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-200 disabled:opacity-50">
+                            class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-200 disabled:opacity-50">
                             Créer le Badge
                         </button>
                     </div>
@@ -137,7 +137,7 @@
                             <div class="text-3xl">{{ badge.iconeUrl }}</div>
                             <div>
                                 <h4 class="font-black text-slate-800 uppercase tracking-tight">{{ badge.nom }}</h4>
-                                <p class="text-[10px] font-bold text-emerald-500">Seuil: {{ badge.seuilScore }}% de
+                                <p class="text-[10px] font-bold text-blue-500">Seuil: {{ badge.seuilScore }}% de
                                     fiabilité</p>
                             </div>
                         </div>
