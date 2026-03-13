@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, UserProfile, UpdateProfileRequest } from '../../services/auth.service';
+import { AuthFacade } from '../../store/auth/auth.facade';
 import { MissionsComponent } from '../missions/missions.component';
 import { ScorePipe } from '../../pipes/score.pipe';
 
@@ -34,6 +35,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private authFacade: AuthFacade,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -78,6 +80,7 @@ export class DashboardComponent implements OnInit {
     this.route.data.subscribe(data => {
       if (data['profile']) {
         this.userProfile = data['profile'];
+
         this.isLoading = false;
         this.resetForm();
       } else {
@@ -93,6 +96,7 @@ export class DashboardComponent implements OnInit {
     this.authService.getProfile().subscribe({
       next: (profile) => {
         this.userProfile = profile;
+
         this.isLoading = false;
         this.resetForm();
       },
@@ -103,7 +107,7 @@ export class DashboardComponent implements OnInit {
 
         // If unauthorized, redirect to login
         if (error.status === 401 || error.status === 403) {
-          this.authService.logout();
+          this.authFacade.logout();
           this.router.navigate(['/login']);
         }
       }
@@ -147,7 +151,7 @@ export class DashboardComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authFacade.logout();
     this.router.navigate(['/login']);
   }
 }
