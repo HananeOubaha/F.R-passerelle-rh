@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { AdminService, AdminStats } from '../../services/admin.service';
 import { AuthService } from '../../services/auth.service';
+import { AuthFacade } from '../../store/auth/auth.facade';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -50,7 +51,7 @@ export class AdminDashboardComponent implements OnInit {
     datasets: [{ data: [], backgroundColor: '#10B981', borderRadius: 8 }]
   };
 
-  constructor(private adminService: AdminService, private authService: AuthService, private route: ActivatedRoute) { }
+  constructor(private adminService: AdminService, private authService: AuthService, private authFacade: AuthFacade, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     // Données pré-chargées par le adminStatsResolver
@@ -96,6 +97,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authFacade.logout();
+    this.router.navigate(['/login']);
   }
 }
