@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, Mission } from '../../services/auth.service';
+import { MissionsFacade } from '../../store/missions/missions.facade';
 import { dateFutureValidator } from '../../validators/custom.validators';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { DateRelativePipe } from '../../pipes/date-relative.pipe';
@@ -14,8 +15,6 @@ import { DateRelativePipe } from '../../pipes/date-relative.pipe';
   styleUrl: './missions.component.css'
 })
 export class MissionsComponent implements OnInit {
-  missions: Mission[] = [];
-  isLoading = true;
   isSubmitting = false;
   showForm = false;
   errorMessage = '';
@@ -23,14 +22,17 @@ export class MissionsComponent implements OnInit {
   missionForm!: FormGroup;
   userCompetences: any[] = [];
 
+  readonly vm$ = this.missionsFacade.vm$;
+
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private missionsFacade: MissionsFacade
   ) { }
 
   ngOnInit(): void {
     this.initForm();
-    this.loadMissions();
+    this.missionsFacade.loadMissions();
     this.loadUserProfile();
   }
 
@@ -61,17 +63,12 @@ export class MissionsComponent implements OnInit {
   }
 
   loadMissions(): void {
-    this.isLoading = true;
-    this.authService.getMissions().subscribe({
-      next: (missions) => {
-        this.missions = missions;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Impossible de charger les missions.';
-        this.isLoading = false;
-      }
-    });
+    // Delégué au store
+    this.missionsFacade.loadMissions();
+  }
+
+  changePage(page: number): void {
+    this.missionsFacade.changePage(page);
   }
 
   toggleCompetence(id: number): void {
@@ -91,36 +88,46 @@ export class MissionsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.missionForm.invalid) {
-      this.missionForm.markAllAsTouched();
-      return;
-    }
+    if (this.missionForm.invalid) return;
 
     this.isSubmitting = true;
+    this.errorMessage = '';
+
     this.authService.createMission(this.missionForm.value).subscribe({
-      next: (created) => {
-        this.missions.unshift(created);
-        this.missionForm.reset({ competenceIds: [], validatorEmail: '', titre: '', description: '', dateDebut: '', dateFin: '' });
+      next: () => {
         this.isSubmitting = false;
         this.showForm = false;
+        this.missionForm.reset();
+        // Le store écoute createMissionSuccess mais ici on fait un appel direct
+        // Pour être propre, on devrait dispatcher une action createMission,
+        // mais pour l'instant un reload suffit.
+        this.missionsFacade.loadMissions();
       },
-      error: () => {
-        this.errorMessage = 'Erreur lors de la création de la mission.';
+      error: (err) => {
         this.isSubmitting = false;
+        this.errorMessage = err?.error?.message || 'Erreur lors de la création';
       }
     });
   }
 
   deleteMission(id: number): void {
-    if (!confirm('Supprimer cette mission ?')) return;
-    this.authService.deleteMission(id).subscribe({
-      next: () => {
-        this.missions = this.missions.filter(m => m.id !== id);
-      },
-      error: () => {
-        this.errorMessage = 'Impossible de supprimer cette mission.';
-      }
-    });
+    this.missionsFacade.deleteMission(id);
+  }
+
+  statutClass(statut: string): string {
+    switch (statut) {
+      case 'VALIDATED': return 'bg-emerald-100 text-emerald-700';
+      case 'REJECTED': return 'bg-red-100 text-red-700';
+      default: return 'bg-amber-100 text-amber-700';
+    }
+  }
+
+  statutLabel(statut: string): string {
+    switch (statut) {
+      case 'VALIDATED': return 'Validée';
+      case 'REJECTED': return 'Rejetée';
+      default: return 'En attente';
+    }
   }
 
   downloadAttestation(id: number, titre: string): void {
@@ -139,17 +146,5 @@ export class MissionsComponent implements OnInit {
         this.errorMessage = 'Erreur lors du téléchargement de l\'attestation.';
       }
     });
-  }
-
-  statutLabel(statut: string): string {
-    return { PENDING: 'En attente', VALIDATED: 'Validée', REJECTED: 'Rejetée' }[statut] ?? statut;
-  }
-
-  statutClass(statut: string): string {
-    return {
-      PENDING: 'bg-amber-50 text-amber-700 border border-amber-200',
-      VALIDATED: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-      REJECTED: 'bg-red-50 text-red-700 border border-red-200'
-    }[statut] ?? 'bg-slate-100 text-slate-600';
   }
 }
