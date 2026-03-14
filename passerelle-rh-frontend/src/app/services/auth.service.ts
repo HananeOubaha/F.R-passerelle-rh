@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 
 export type MissionStatut = 'PENDING' | 'VALIDATED' | 'REJECTED';
@@ -80,6 +80,17 @@ export interface UpdateProfileRequest {
   ville: string;
 }
 
+export interface Page<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -129,6 +140,19 @@ export class AuthService {
 
   getMissions(): Observable<Mission[]> {
     return this.http.get<Mission[]>('http://localhost:8080/api/missions');
+  }
+
+  getMissionsPaginated(page: number, size: number, sort: string = 'dateDebut,desc', statut?: MissionStatut): Observable<Page<Mission>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sort', sort);
+
+    if (statut) {
+      params = params.set('statut', statut);
+    }
+
+    return this.http.get<Page<Mission>>('http://localhost:8080/api/missions/page', { params });
   }
 
   createMission(data: CreateMissionRequest): Observable<Mission> {
