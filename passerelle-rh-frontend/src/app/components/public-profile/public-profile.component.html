@@ -74,9 +74,10 @@
                                         class="text-[10px] font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 px-2 py-0.5 rounded-full">Certifié
                                         Authentique</span>
                                 </div>
-                                <h1 class="text-3xl md:text-4xl font-black text-white">{{ profile.prenom }} {{
-                                    profile.nom }}</h1>
-                                <p class="text-slate-400 mt-1 font-medium italic">Profil Public • Membre Passerelle RH
+                                <h1 class="text-3xl md:text-4xl font-black text-white">{{ profile.prenom }} {{ profile.nom }}</h1>
+                                <p class="text-slate-400 mt-1 font-medium italic flex items-center gap-2">
+                                    <svg *ngIf="profile.ville" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    {{ profile.ville ? profile.ville : 'Profil Public • Membre Passerelle RH' }}
                                 </p>
                             </div>
                         </div>
@@ -131,7 +132,7 @@
                         <div class="flex flex-wrap gap-2.5">
                             <span *ngFor="let c of profile.competences"
                                 class="px-5 py-2.5 bg-indigo-50 text-indigo-700 text-sm font-bold rounded-2xl border border-indigo-100 hover:scale-105 transition-transform cursor-default">
-                                {{ c.nom }}
+                                {{ c }}
                             </span>
                             <div *ngIf="!profile.competences.length" class="text-slate-400 italic text-sm">Aucune
                                 compétence listée.</div>
@@ -181,8 +182,14 @@
                                         <h3
                                             class="font-black text-slate-800 text-lg leading-tight uppercase tracking-tight">
                                             {{ m.titre }}</h3>
-                                        <p class="text-xs text-slate-500 mt-1 font-medium">Validée le {{ m.dateValid |
-                                            date:'longDate' }} • Par {{ m.validateurName }}</p>
+                                        <p class="text-xs text-slate-500 mt-1 font-medium">
+                                            <span *ngIf="m.dateDebut && m.dateFin">Du {{ m.dateDebut | date:'shortDate' }} au {{ m.dateFin | date:'shortDate' }}</span>
+                                            <span *ngIf="!m.dateDebut">Validée le {{ m.dateFin || m.dateValid | date:'longDate' }}</span>
+                                            • Par {{ m.validateurName }}
+                                        </p>
+                                        <p *ngIf="m.evaluation" class="text-sm text-slate-600 mt-2 italic border-l-2 border-blue-200 pl-3">
+                                            "{{ m.evaluation }}"
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="hidden sm:flex items-center gap-2">

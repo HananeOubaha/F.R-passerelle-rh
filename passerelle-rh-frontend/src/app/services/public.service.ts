@@ -5,10 +5,27 @@ import { Observable } from 'rxjs';
 export interface PublicProfile {
     nom: string;
     prenom: string;
+    ville?: string;
     scoreFiabilite: number;
-    competences: any[];
-    badges: any[];
-    missions: any[];
+    competences: string[];
+    badges: BadgeDTO[];
+    missions: PublicMission[];
+}
+
+export interface BadgeDTO {
+    nom: string;
+    niveau: string;
+    iconeUrl?: string;
+}
+
+export interface PublicMission {
+    titre: string;
+    description?: string;
+    dateDebut?: string;
+    dateFin?: string;
+    validateurName: string;
+    evaluation?: string;
+    dateValid?: string;
 }
 
 export interface VerificationResult {

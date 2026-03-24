@@ -15,13 +15,13 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByProfilePublicToken(String profilePublicToken);
+
     boolean existsByEmail(String email);
 
     java.util.List<User> findByRole(Role role);
 
     long countByRole(Role role);
-
-    java.util.Optional<User> findByProfilePublicToken(String token);
 
     // Méthodes paginées
     Page<User> findByRole(Role role, Pageable pageable);

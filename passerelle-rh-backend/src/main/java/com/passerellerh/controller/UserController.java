@@ -26,32 +26,58 @@ public class UserController {
 
         return userRepository.findByProfilePublicToken(token)
                 .map(user -> {
-                    com.passerellerh.dto.PublicProfileDTO dto = new com.passerellerh.dto.PublicProfileDTO();
-                    dto.setNom(user.getNom());
-                    dto.setPrenom(user.getPrenom());
-                    dto.setScoreFiabilite(user.getScoreFiabilite());
+                    // Mapping de base
+                    com.passerellerh.dto.PublicProfileDTO.PublicProfileDTOBuilder builder =
+                            com.passerellerh.dto.PublicProfileDTO.builder()
+                            .nom(user.getNom())
+                            .prenom(user.getPrenom())
+                            .ville(user.getVille())
+                            .scoreFiabilite(user.getScoreFiabilite());
 
-                    com.passerellerh.dto.UserResponseDTO userDto = userMapper.toDto(user);
-                    dto.setCompetences(userDto.getCompetences());
-                    dto.setBadges(userDto.getBadges());
+                    // Mapping spécifique Utilisateur (Badges, Compétences, Missions)
+                    if (user instanceof com.passerellerh.entity.Utilisateur) {
+                        com.passerellerh.entity.Utilisateur utilisateur = (com.passerellerh.entity.Utilisateur) user;
 
-                    java.util.List<com.passerellerh.dto.PublicProfileDTO.PublicMissionDTO> publicMissions = missionRepository
-                            .findByUtilisateurIdAndStatut(user.getId(), com.passerellerh.enums.StatutMission.VALIDATED)
-                            .stream()
-                            .map(m -> {
-                                com.passerellerh.dto.PublicProfileDTO.PublicMissionDTO pm = new com.passerellerh.dto.PublicProfileDTO.PublicMissionDTO();
-                                pm.setTitre(m.getTitre());
-                                if (m.getValidation() != null) {
-                                    pm.setDateValid(m.getValidation().getDateValidation().toString());
-                                    pm.setValidateurName(m.getValidation().getValidateur().getPrenom() + " "
-                                            + m.getValidation().getValidateur().getNom());
-                                }
-                                return pm;
-                            })
-                            .collect(java.util.stream.Collectors.toList());
+                        // Compétences
+                        if (utilisateur.getCompetences() != null) {
+                            java.util.List<String> competences = utilisateur.getCompetences().stream()
+                                    .map(com.passerellerh.entity.Competence::getNom)
+                                    .collect(java.util.stream.Collectors.toList());
+                            builder.competences(competences);
+                        }
 
-                    dto.setMissions(publicMissions);
-                    return ResponseEntity.ok(dto);
+                        // Badges (via Passeport)
+                        if (utilisateur.getPasseport() != null && utilisateur.getPasseport().getBadges() != null) {
+                            java.util.List<com.passerellerh.dto.PublicProfileDTO.BadgeDTO> badges =
+                                    utilisateur.getPasseport().getBadges().stream()
+                                    .map(b -> com.passerellerh.dto.PublicProfileDTO.BadgeDTO.builder()
+                                            .nom(b.getNom())
+                                            .niveau(b.getNiveau() != null ? b.getNiveau().name() : null)
+                                            .build())
+                                    .collect(java.util.stream.Collectors.toList());
+                            builder.badges(badges);
+                        }
+
+                        // Missions Validées
+                        java.util.List<com.passerellerh.dto.PublicProfileDTO.PublicMissionDTO> missions =
+                                missionRepository.findByUtilisateurIdAndStatut(
+                                        utilisateur.getId(), com.passerellerh.enums.StatutMission.VALIDATED)
+                                .stream()
+                                .map(m -> com.passerellerh.dto.PublicProfileDTO.PublicMissionDTO.builder()
+                                        .titre(m.getTitre())
+                                        .description(m.getDescription())
+                                        .dateDebut(m.getDateDebut())
+                                        .dateFin(m.getDateFin())
+                                        .validateurName(m.getValidation() != null && m.getValidation().getValidateur() != null ?
+                                                m.getValidation().getValidateur().getPrenom() + " " + m.getValidation().getValidateur().getNom() :
+                                                "Validateur inconnu")
+                                        .evaluation(m.getValidation() != null ? m.getValidation().getCommentaire() : null)
+                                        .build())
+                                .collect(java.util.stream.Collectors.toList());
+                        builder.missions(missions);
+                    }
+
+                    return ResponseEntity.ok(builder.build());
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
