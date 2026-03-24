@@ -4,7 +4,7 @@
   <div class="w-full lg:w-1/2 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 relative z-10 bg-white">
     <!-- Back to home -->
     <a routerLink="/"
-      class="absolute top-8 left-8 text-slate-500 hover:text-blue-600 flex items-center gap-2 transition-colors font-medium">
+      class="absolute top-8 left-8 text-slate-400 hover:text-blue-600 flex items-center gap-2 transition-colors font-bold text-sm uppercase tracking-wider">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
       </svg>
@@ -14,21 +14,23 @@
     <div class="max-w-md w-full animate-fade-in-up mt-16 lg:mt-0">
       <div class="text-center mb-10">
         <div
-          class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/30 mb-6">
-          <span class="text-white font-bold text-3xl">P</span>
+          class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-blue-500 to-blue-600 rounded-2xl shadow-lg shadow-blue-500/30 mb-6">
+          <span class="text-white font-black text-3xl">P</span>
         </div>
         <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Espace Client</h2>
-        <p class="mt-3 text-sm text-slate-500">
-          Connectez-vous pour gérer vos compétences
+        <p class="mt-3 text-sm text-slate-500 font-medium">
+          Accédez à votre tableau de bord et gérez vos talents
         </p>
       </div>
 
-      <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
+      <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden">
+        <!-- Decor -->
+        <div class="absolute top-0 right-0 w-20 h-20 bg-blue-50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
 
-        <form [formGroup]="loginForm" class="space-y-6" (ngSubmit)="onSubmit()">
+        <form [formGroup]="loginForm" class="space-y-6 relative" (ngSubmit)="onSubmit()">
 
           <div>
-            <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">Adresse Email</label>
+            <label for="email" class="block text-xs font-bold text-slate-900 uppercase tracking-wide mb-2">Adresse Email</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,12 +39,12 @@
                 </svg>
               </div>
               <input id="email" formControlName="email" type="email" [ngClass]="{
-                  'pl-12 w-full px-4 py-3 border text-slate-900 rounded-xl focus:outline-none focus:ring-2 transition-all text-sm bg-slate-50/50': true,
+                  'pl-12 w-full px-4 py-3.5 border text-slate-900 rounded-xl focus:outline-none focus:ring-2 transition-all text-sm bg-slate-50/50 font-medium placeholder:text-slate-400': true,
                   'border-red-300 focus:ring-red-500 focus:border-red-500': email?.invalid && email?.touched,
-                  'border-slate-200 hover:border-slate-300 focus:ring-blue-500 focus:border-blue-500': !email?.invalid || !email?.touched
+                  'border-slate-200 hover:border-blue-300 focus:ring-blue-500 focus:border-blue-500': !email?.invalid || !email?.touched
                 }" placeholder="prenom.nom@entreprise.com" />
             </div>
-            <div *ngIf="email?.invalid && email?.touched" class="mt-2 text-xs text-red-600 flex items-center gap-1">
+            <div *ngIf="email?.invalid && email?.touched" class="mt-2 text-xs text-red-600 flex items-center gap-1 font-semibold">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
                   d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
@@ -55,7 +57,8 @@
 
           <div>
             <div class="flex justify-between items-center mb-2">
-              <label for="password" class="block text-sm font-semibold text-slate-700">Mot de passe</label>
+              <label for="password" class="block text-xs font-bold text-slate-900 uppercase tracking-wide">Mot de passe</label>
+              <a href="#" class="text-xs font-bold text-blue-600 hover:text-blue-500">Oublié ?</a>
             </div>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -65,13 +68,13 @@
                 </svg>
               </div>
               <input id="password" formControlName="password" type="password" [ngClass]="{
-                  'pl-12 w-full px-4 py-3 border text-slate-900 rounded-xl focus:outline-none focus:ring-2 transition-all text-sm bg-slate-50/50': true,
+                  'pl-12 w-full px-4 py-3.5 border text-slate-900 rounded-xl focus:outline-none focus:ring-2 transition-all text-sm bg-slate-50/50 font-medium placeholder:text-slate-400': true,
                   'border-red-300 focus:ring-red-500 focus:border-red-500': password?.invalid && password?.touched,
-                  'border-slate-200 hover:border-slate-300 focus:ring-blue-500 focus:border-blue-500': !password?.invalid || !password?.touched
+                  'border-slate-200 hover:border-blue-300 focus:ring-blue-500 focus:border-blue-500': !password?.invalid || !password?.touched
                 }" placeholder="••••••••" />
             </div>
             <div *ngIf="password?.invalid && password?.touched"
-              class="mt-2 text-xs text-red-600 flex items-center gap-1">
+              class="mt-2 text-xs text-red-600 flex items-center gap-1 font-semibold">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
                   d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
@@ -82,7 +85,7 @@
             </div>
           </div>
 
-          <div *ngIf="errorMessage" class="flex items-start gap-3 bg-red-50 p-4 rounded-xl border border-red-100">
+          <div *ngIf="errorMessage" class="flex items-start gap-3 bg-red-50 p-4 rounded-xl border border-red-100 animate-shake">
             <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -92,25 +95,25 @@
           </div>
 
           <button type="submit" [disabled]="loginForm.invalid || isLoading"
-            class="w-full flex justify-center py-3.5 px-4 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 shadow-xl shadow-blue-600/20">
+            class="w-full flex justify-center py-4 px-4 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 shadow-xl shadow-blue-600/20 uppercase tracking-wide">
             <span *ngIf="!isLoading">Se connecter</span>
             <span *ngIf="isLoading" class="flex items-center gap-2">
               <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
               </svg>
-              Connexion en cours...
+              Connexion...
             </span>
           </button>
         </form>
       </div>
 
-      <div class="mt-8 text-center text-sm text-slate-500">
+      <div class="mt-8 text-center text-sm text-slate-500 font-medium">
         Pas encore de compte ?
         <a routerLink="/register" class="font-bold text-blue-600 hover:text-blue-500 transition-colors">Inscrivez-vous
           gratuitement</a>
       </div>
-      <div class="mt-12 text-center text-xs text-slate-400">
+      <div class="mt-12 text-center text-xs font-bold text-slate-300 uppercase tracking-widest">
         &copy; 2026 Passerelle RH. Tous droits réservés.
       </div>
     </div>
@@ -128,27 +131,7 @@
       class="absolute bottom-12 left-12 right-12 bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-3xl text-white">
       <div class="flex gap-2 text-blue-300 mb-4">
         <!-- Stars -->
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg>
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg>
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg>
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg>
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" *ngFor="let i of [1,2,3,4,5]">
           <path
             d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
           </path>
@@ -170,3 +153,4 @@
     </div>
   </div>
 </div>
+
