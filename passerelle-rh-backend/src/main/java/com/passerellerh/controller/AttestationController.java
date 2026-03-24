@@ -7,6 +7,7 @@ import com.passerellerh.repository.MissionRepository;
 import com.passerellerh.repository.ValidationRepository;
 import com.passerellerh.service.PdfService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/attestations")
 @RequiredArgsConstructor
 public class AttestationController {
+
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     private final MissionRepository missionRepository;
     private final ValidationRepository validationRepository;
@@ -40,7 +44,7 @@ public class AttestationController {
                     .orElseThrow(() -> new RuntimeException("Validation non trouvée pour cette mission"));
 
             // Le QR Code pointera vers l'URL du frontend qui vérifiera l'authenticité
-            String qrCodeData = "http://localhost:4200/verify/" + missionId;
+            String qrCodeData = frontendUrl + "/verify/" + missionId;
 
             byte[] pdfBytes = pdfService.generateAttestation(mission, validation, qrCodeData);
 
