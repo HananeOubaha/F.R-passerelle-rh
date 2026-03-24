@@ -55,3 +55,4 @@ jobs:
       - name: Build Angular app
         run: npm run build -- --configuration production
         working-directory: passerelle-rh-frontend
+
