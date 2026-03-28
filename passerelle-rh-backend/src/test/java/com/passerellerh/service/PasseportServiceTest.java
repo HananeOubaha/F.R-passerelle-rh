@@ -107,7 +107,7 @@ class PasseportServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Passeport inexistant — il est créé automatiquement")
+    @DisplayName(" Passeport inexistant — il est créé automatiquement")
     void checkAndAssignBadges_noPasseport_createsNewOne() {
         utilisateur.setScoreFiabilite(30.0);
         when(passeportRHRepository.findByUtilisateurId(1L)).thenReturn(Optional.empty());

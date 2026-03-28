@@ -129,4 +129,14 @@ public class AdminService {
     public void deleteBadge(Long id) {
         badgeRepository.deleteById(id);
     }
+    public List<User> getAdmins(){
+        return
+                userRepository.findAll().stream()
+                        .filter(user::getRole==Role.ADMIN)
+                        user->user.getRole()
+                        .tolist();
+    }
 }
+
+
+

@@ -47,7 +47,7 @@ class AuthServiceTest {
     private AuthService authService;
 
     @Test
-    @DisplayName("✅ Inscription réussie — retourne un token JWT")
+    @DisplayName(" Inscription réussie — retourne un token JWT")
     void register_success_returnsAuthResponse() {
         // GIVEN
         RegisterRequest request = new RegisterRequest();
@@ -84,7 +84,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("❌ Inscription — email déjà existant lève une exception")
+    @DisplayName(" Inscription — email déjà existant lève une exception")
     void register_emailAlreadyExists_throwsException() {
         RegisterRequest request = new RegisterRequest();
         request.setEmail("existing@test.com");
@@ -99,7 +99,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Connexion réussie — retourne un token JWT")
+    @DisplayName(" Connexion réussie — retourne un token JWT")
     void login_success_returnsAuthResponse() {
         // GIVEN
         AuthRequest request = new AuthRequest();
@@ -131,7 +131,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("❌ Connexion — mauvais mot de passe lève une exception")
+    @DisplayName(" Connexion — mauvais mot de passe lève une exception")
     void login_badCredentials_throwsException() {
         AuthRequest request = new AuthRequest();
         request.setEmail("jean@test.com");
@@ -144,7 +144,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Refresh token valide — retourne de nouveaux tokens")
+    @DisplayName(" Refresh token valide — retourne de nouveaux tokens")
     void refreshToken_validToken_returnsNewTokens() {
         String refreshToken = "valid_refresh";
 
@@ -172,7 +172,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("❌ Refresh token invalide — lève une exception")
+    @DisplayName(" Refresh token invalide — lève une exception")
     void refreshToken_invalidToken_throwsException() {
         String refreshToken = "invalid_refresh";
 

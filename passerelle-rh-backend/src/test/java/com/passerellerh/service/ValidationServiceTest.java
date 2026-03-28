@@ -71,7 +71,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Validation réussie — met à jour le statut et le score")
+    @DisplayName(" Validation réussie — met à jour le statut et le score")
     void validateMission_success_updatesStatusAndScore() {
         // GIVEN
         ValidateMissionRequest request = new ValidateMissionRequest();
@@ -102,7 +102,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    @DisplayName("❌ Mission introuvable — lève une exception")
+    @DisplayName(" Mission introuvable — lève une exception")
     void validateMission_missionNotFound_throwsException() {
         when(missionRepository.findById(999L)).thenReturn(Optional.empty());
 
@@ -112,7 +112,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    @DisplayName("❌ Mission déjà validée — lève une exception")
+    @DisplayName(" Mission déjà validée — lève une exception")
     void validateMission_alreadyValidated_throwsException() {
         mission.setStatut(StatutMission.VALIDATED);
         when(missionRepository.findById(1L)).thenReturn(Optional.of(mission));
@@ -123,7 +123,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    @DisplayName("❌ Sécurité: email du validateur ne correspond pas — lève une exception")
+    @DisplayName(" Sécurité: email du validateur ne correspond pas — lève une exception")
     void validateMission_wrongValidatorEmail_throwsSecurityException() {
         when(missionRepository.findById(1L)).thenReturn(Optional.of(mission));
 
@@ -133,7 +133,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    @DisplayName("📊 Calcul du score — moyenne correcte sur plusieurs compétences")
+    @DisplayName(" Calcul du score — moyenne correcte sur plusieurs compétences")
     void validateMission_scoreCalculation_isCorrect() {
         // GIVEN : 3 compétences notées 4, 4, 4 → moyenne = 4 → score = (0 + 4*20) / 2 =
         // 40.0
@@ -167,7 +167,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    @DisplayName("📊 Calcul du score — amélioration progressive avec 2 validations")
+    @DisplayName(" Calcul du score — amélioration progressive avec 2 validations")
     void validateMission_scoreImproves_withSecondValidation() {
         // Simule un utilisateur qui a déjà un score de 40 après une première validation
         utilisateur.setScoreFiabilite(40.0);

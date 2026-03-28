@@ -58,7 +58,7 @@ class EmailServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Envoi d'invitation de validation — email envoyé avec succès")
+    @DisplayName(" Envoi d'invitation de validation — email envoyé avec succès")
     void sendValidationInvitation_shouldSendEmail() {
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
         doNothing().when(mailSender).send(any(MimeMessage.class));
@@ -70,7 +70,7 @@ class EmailServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Notification mission validée — email envoyé à l'utilisateur")
+    @DisplayName(" Notification mission validée — email envoyé à l'utilisateur")
     void sendMissionValidatedNotification_shouldSendEmail() {
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
         doNothing().when(mailSender).send(any(MimeMessage.class));
@@ -81,7 +81,7 @@ class EmailServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Notification mission rejetée — email envoyé avec motif")
+    @DisplayName(" Notification mission rejetée — email envoyé avec motif")
     void sendMissionRejectedNotification_shouldSendEmailWithReason() {
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
         doNothing().when(mailSender).send(any(MimeMessage.class));
@@ -92,7 +92,7 @@ class EmailServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Notification mission rejetée — sans motif ne lève pas d'exception")
+    @DisplayName(" Notification mission rejetée — sans motif ne lève pas d'exception")
     void sendMissionRejectedNotification_withNullReason_shouldNotThrow() {
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
         doNothing().when(mailSender).send(any(MimeMessage.class));
@@ -103,7 +103,7 @@ class EmailServiceTest {
     }
 
     @Test
-    @DisplayName("✅ Erreur envoi email — ne lève pas d'exception (graceful)")
+    @DisplayName(" Erreur envoi email — ne lève pas d'exception (graceful)")
     void sendEmail_whenMailSenderFails_shouldNotThrow() {
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
         doThrow(new org.springframework.mail.MailSendException("SMTP error")).when(mailSender).send(any(MimeMessage.class));
