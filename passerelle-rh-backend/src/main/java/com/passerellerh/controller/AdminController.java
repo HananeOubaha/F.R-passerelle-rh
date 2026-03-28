@@ -29,9 +29,8 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllUsers());
     }
 
-    /**
-     * Endpoint paginé pour la gestion des utilisateurs.
-     * Supporte tri (?sort=nom,asc) et recherche (?search=dupont).
+    /*
+     Endpoint paginé pour la gestion des utilisateurs.
      */
     @GetMapping("/users/page")
     public ResponseEntity<Page<UserResponseDTO>> getUsersPaginated(

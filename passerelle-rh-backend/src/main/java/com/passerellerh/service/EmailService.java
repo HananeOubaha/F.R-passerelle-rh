@@ -53,7 +53,7 @@ public class EmailService {
                             <a href="%s/validateur"
                                style="background: #10B981; color: white; padding: 14px 32px; border-radius: 8px;
                                       text-decoration: none; font-weight: bold; font-size: 15px; display: inline-block;">
-                                ✅ Accéder au dashboard validateur
+                                 Accéder au dashboard validateur
                             </a>
                         </div>
                         <p style="color: #9CA3AF; font-size: 13px; text-align: center;">
@@ -82,15 +82,15 @@ public class EmailService {
     @Async
     public void sendMissionValidatedNotification(Mission mission) {
         String to = mission.getUtilisateur().getEmail();
-        String subject = "✅ Mission validée : " + mission.getTitre();
+        String subject = " Mission validée : " + mission.getTitre();
 
         String htmlBody = """
                 <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                     <div style="background: linear-gradient(135deg, #059669, #10B981); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-                        <h1 style="color: white; margin: 0;">🎯 Passerelle RH</h1>
+                        <h1 style="color: white; margin: 0;"> Passerelle RH</h1>
                     </div>
                     <div style="background: #fff; padding: 30px; border: 1px solid #E5E7EB; border-top: none;">
-                        <h2 style="color: #059669;">✅ Bonne nouvelle !</h2>
+                        <h2 style="color: #059669;"> Bonne nouvelle !</h2>
                         <p style="color: #4B5563;">Bonjour <strong>%s</strong>,</p>
                         <p style="color: #4B5563;">Votre mission <strong>« %s »</strong> a été <strong style="color: #059669;">validée avec succès</strong> !</p>
                         <p style="color: #4B5563;">Consultez votre Passeport RH pour voir votre score et vos nouveaux badges.</p>
@@ -98,7 +98,7 @@ public class EmailService {
                             <a href="%s/passeport"
                                style="background: #10B981; color: white; padding: 14px 32px; border-radius: 8px;
                                       text-decoration: none; font-weight: bold;">
-                                📊 Voir mon Passeport RH
+                                 Voir mon Passeport RH
                             </a>
                         </div>
                     </div>
@@ -118,7 +118,7 @@ public class EmailService {
     @Async
     public void sendMissionRejectedNotification(Mission mission, String reason) {
         String to = mission.getUtilisateur().getEmail();
-        String subject = "❌ Mission rejetée : " + mission.getTitre();
+        String subject = " Mission rejetée : " + mission.getTitre();
 
         String reasonBlock = (reason != null && !reason.isBlank())
                 ? "<p style=\"color: #6B7280;\"><strong>Motif :</strong> " + reason + "</p>"
@@ -127,10 +127,10 @@ public class EmailService {
         String htmlBody = """
                 <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                     <div style="background: linear-gradient(135deg, #DC2626, #EF4444); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
-                        <h1 style="color: white; margin: 0;">🎯 Passerelle RH</h1>
+                        <h1 style="color: white; margin: 0;"> Passerelle RH</h1>
                     </div>
                     <div style="background: #fff; padding: 30px; border: 1px solid #E5E7EB; border-top: none;">
-                        <h2 style="color: #DC2626;">❌ Mission rejetée</h2>
+                        <h2 style="color: #DC2626;"> Mission rejetée</h2>
                         <p style="color: #4B5563;">Bonjour <strong>%s</strong>,</p>
                         <p style="color: #4B5563;">Votre mission <strong>« %s »</strong> a été rejetée par le validateur.</p>
                         %s
@@ -139,7 +139,7 @@ public class EmailService {
                             <a href="%s/dashboard"
                                style="background: #6366F1; color: white; padding: 14px 32px; border-radius: 8px;
                                       text-decoration: none; font-weight: bold;">
-                                🔄 Retour au dashboard
+                                 Retour au dashboard
                             </a>
                         </div>
                     </div>
@@ -163,9 +163,9 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
             mailSender.send(message);
-            log.info("✅ Email envoyé avec succès à {}", to);
+            log.info(" Email envoyé avec succès à {}", to);
         } catch (Exception e) {
-            log.error("❌ Erreur envoi email à {} : {}", to, e.getMessage());
+            log.error(" Erreur envoi email à {} : {}", to, e.getMessage());
         }
     }
 }

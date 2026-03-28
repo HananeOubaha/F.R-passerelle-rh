@@ -33,7 +33,7 @@ public class DataInitializer implements CommandLineRunner {
             or.setIconeUrl("🥇");
 
             badgeRepository.saveAll(List.of(bronze, argent, or));
-            System.out.println("✅ Badges par défaut initialisés.");
+            System.out.println(" Badges par défaut initialisés.");
         }
     }
 }

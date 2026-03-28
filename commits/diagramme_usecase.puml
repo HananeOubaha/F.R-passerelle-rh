@@ -1,0 +1,71 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor "Visiteur" as Visitor
+actor "Candidat" as Candidate
+actor "Validateur" as Validator
+actor "Administrateur" as Admin
+
+package "Système Passerelle RH" {
+
+    ' --- VISITEUR ---
+    usecase "S'inscrire (Créer compte)" as UC_Register
+    usecase "Se connecter" as UC_Login
+    usecase "Consulter un Profil Public" as UC_ViewPublic
+
+    ' --- CANDIDAT ---
+    usecase "Gérer les Missions" as UC_ManageMissions
+    usecase "Créer une mission" as UC_CreateMission
+    usecase "Inviter un validateur" as UC_InviteValidator
+    usecase "Générer Attestation PDF" as UC_GenPDF
+
+    usecase "Consulter Passeport RH" as UC_ViewPassport
+    usecase "Voir Timeline & Badges" as UC_ViewBadges
+
+    usecase "Gérer son Profil" as UC_ManageProfile
+    usecase "Editer infos personnelles" as UC_EditProfile
+    usecase "Partager lien public" as UC_ShareLink
+
+    ' --- VALIDATEUR ---
+    usecase "Traiter une Validation" as UC_ProcessValidation
+    usecase "Noter compétences (1-5)" as UC_Rate
+    usecase "Ajouter un commentaire" as UC_Comment
+    usecase "Refuser la mission" as UC_Reject
+
+    ' --- ADMIN ---
+    usecase "Administration" as UC_AdminPanel
+    usecase "Gérer Utilisateurs" as UC_ManageUsers
+    usecase "Bloquer/Débloquer" as UC_BlockUser
+    usecase "Voir Statistiques" as UC_Stats
+}
+
+' Relations Visiteur
+Visitor --> UC_Register
+Visitor --> UC_Login
+Visitor --> UC_ViewPublic
+
+' Relations Candidat
+Candidate --> UC_ManageMissions
+UC_ManageMissions ..> UC_CreateMission : <<include>>
+UC_CreateMission ..> UC_InviteValidator : <<include>>
+UC_ManageMissions <.. UC_GenPDF : <<extend>>
+
+Candidate --> UC_ViewPassport
+Candidate --> UC_ManageProfile
+UC_ViewPassport ..> UC_ViewBadges : <<include>>
+UC_ManageProfile ..> UC_EditProfile : <<include>>
+UC_ManageProfile ..> UC_ShareLink : <<include>>
+
+' Relations Validateur
+Validator --> UC_ProcessValidation
+UC_ProcessValidation ..> UC_Rate : <<include>>
+UC_ProcessValidation <.. UC_Comment : <<extend>>
+UC_ProcessValidation <.. UC_Reject : <<extend>>
+
+' Relations Admin
+Admin --> UC_AdminPanel
+UC_AdminPanel ..> UC_ManageUsers : <<include>>
+UC_ManageUsers <.. UC_BlockUser : <<extend>>
+UC_AdminPanel ..> UC_Stats : <<include>>
+@enduml
+

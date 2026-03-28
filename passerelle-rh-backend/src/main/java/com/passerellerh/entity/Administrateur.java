@@ -10,5 +10,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Administrateur extends User {
-    // Spécificités admin si nécessaire
+
 }

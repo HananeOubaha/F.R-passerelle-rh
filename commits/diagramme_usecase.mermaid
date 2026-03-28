@@ -1,0 +1,73 @@
+useCaseDiagram
+    %% ACTEURS
+    actor Visitor as "Visiteur"
+    actor Candidate as "Candidat"
+    actor Validator as "Validateur"
+    actor Admin as "Administrateur"
+
+    package "Système Passerelle RH" {
+
+        %% GROUPE : ACCÈS ET VISITEURS
+        usecase "S'inscrire (Créer compte)" as UC_Register
+        usecase "Se connecter" as UC_Login
+        usecase "Consulter un Profil Public" as UC_ViewPublic
+
+        Visitor --> UC_Register
+        Visitor --> UC_Login
+        Visitor --> UC_ViewPublic
+
+        %% GROUPE : GESTION DES MISSIONS (Candidat)
+        usecase "Gérer les Missions" as UC_ManageMissions
+        usecase "Créer une mission" as UC_CreateMission
+        usecase "Inviter un validateur" as UC_InviteValidator
+        usecase "Générer Attestation PDF" as UC_GenPDF
+
+        Candidate --> UC_ManageMissions
+
+        %% Relations Candidat
+        UC_ManageMissions ..> UC_CreateMission : include
+        UC_CreateMission ..> UC_InviteValidator : include
+        UC_ManageMissions <.. UC_GenPDF : extend (si validée)
+
+        %% GROUPE : PASSEPORT ET PROFIL (Candidat)
+        usecase "Consulter Passeport RH" as UC_ViewPassport
+        usecase "Voir Timeline & Badges" as UC_ViewBadges
+        usecase "Gérer son Profil" as UC_ManageProfile
+        usecase "Editer infos personnelles" as UC_EditProfile
+        usecase "Partager lien public" as UC_ShareLink
+
+        Candidate --> UC_ViewPassport
+        Candidate --> UC_ManageProfile
+
+        %% Relations Passeport
+        UC_ViewPassport ..> UC_ViewBadges : include
+        UC_ManageProfile ..> UC_EditProfile : include
+        UC_ManageProfile ..> UC_ShareLink : include
+
+        %% GROUPE : VALIDATION (Validateur)
+        usecase "Traiter une Validation" as UC_ProcessValidation
+        usecase "Noter compétences (1-5)" as UC_Rate
+        usecase "Ajouter un commentaire" as UC_Comment
+        usecase "Refuser la mission" as UC_Reject
+
+        Validator --> UC_ProcessValidation
+
+        %% Relations Validation
+        UC_ProcessValidation ..> UC_Rate : include
+        UC_ProcessValidation <.. UC_Comment : extend
+        UC_ProcessValidation <.. UC_Reject : extend
+
+        %% GROUPE : ADMINISTRATION (Admin)
+        usecase "Administration" as UC_AdminPanel
+        usecase "Gérer Utilisateurs" as UC_ManageUsers
+        usecase "Bloquer/Débloquer" as UC_BlockUser
+        usecase "Voir Statistiques" as UC_Stats
+
+        Admin --> UC_AdminPanel
+
+        %% Relations Admin
+        UC_AdminPanel ..> UC_ManageUsers : include
+        UC_ManageUsers <.. UC_BlockUser : extend
+        UC_AdminPanel ..> UC_Stats : include
+    }
+

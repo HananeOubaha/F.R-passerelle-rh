@@ -51,7 +51,6 @@ public class AdminService {
 
     private Map<String, Long> getTopCompetences() {
         // Basic implementation: count how many times each competence is Mobilized
-        // This could be optimized with a custom JPQL query if needed
         return missionRepository.findAll().stream()
                 .flatMap(m -> m.getCompetencesMobilisees().stream())
                 .collect(Collectors.groupingBy(c -> c.getNom(), Collectors.counting()))
